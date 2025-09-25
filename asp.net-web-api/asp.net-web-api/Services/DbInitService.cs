@@ -14,7 +14,7 @@ namespace asp.net_web_api.Services
 
         public void Dispose()
         {
-            _context.Dispose();
+            _context.Dispose(); 
         }
 
         public bool Initialize()
