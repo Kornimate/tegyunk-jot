@@ -1,12 +1,16 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import logo from "../resources/logo.jpg";
-import thumbnail from "../resources/thumbnail.jpg"
+import logo from "../resources/logo_no_text.png";
+import thumbnail from "../resources/thumbnail.jpg";
+import { useTranslation } from "react-i18next";
+import ReactCountryFlag from "react-country-flag";
 
 export function Home() {
+  const { t } = useTranslation();
+
   const sections = [
     { id: "home", title: "Kezdőlap" },
-    { id: "features", title: "Információ" },
+    { id: "services", title: "Információ" },
     { id: "gallery", title: "Galéria" },
     { id: "contact", title: "Kapcsolat" },
   ];
@@ -47,14 +51,17 @@ export function Home() {
       <header className="fixed w-full z-40 backdrop-blur-sm/20 top-0 left-0 bg-white">
         <div className="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between">
           {/* Logo */}
-          <div className="flex items-center gap-3 cursor-pointer" onClick={() => goTo("home")}> 
-            <div className="w-10 h-10 flex items-center justify-center bg-white/80 rounded-2xl shadow-md">
+          <div
+            className="flex items-center gap-3 cursor-pointer"
+            onClick={() => goTo("home")}
+          >
+            <div className="w-10 h-10 flex items-center justify-center p-[3px] rounded-md bg-gradient-to-r from-red-500 to-black">
               {/* logo */}
-              <img width="120" height="120" src={logo} alt="logo" />
+              <img width="120" height="120" src={logo} alt="logo" className="rounded" />
             </div>
             <div className="hidden sm:block">
-              <div className="text-sm font-semibold">Tegyünk jót</div>
-              <div className="text-xs text-gray-500">Kórházi ágy szállítás</div>
+              <div className="text-sm font-semibold">{t("companyName")}</div>
+              <div className="text-xs text-gray-500">{t("companySlogen")}</div>
             </div>
           </div>
 
@@ -75,12 +82,13 @@ export function Home() {
                   layoutId="underline"
                   initial={false}
                   transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                  className={`absolute left-0 right-0 h-0.5 rounded-full bg-gradient-to-r from-purple-500 to-cyan-400 bottom-[-8px] ${
+                  className={`absolute left-0 right-0 h-0.5 rounded-full bg-gradient-to-r from-red-500 to-black bottom-[-8px] ${
                     active === s.id ? "opacity-100" : "opacity-0"
                   }`}
                 />
               </button>
             ))}
+            <LanguageSelector />
           </nav>
 
           {/* Mobile menu (simple) */}
@@ -107,25 +115,35 @@ export function Home() {
                 transition={{ duration: 0.6 }}
                 className="text-4xl sm:text-5xl font-extrabold leading-tight"
               >
-                Build beautiful frontpages
-                <br />with delightful micro-interactions.
+                {t("title")}
               </motion.h1>
 
               <motion.p
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.2 }}
-                className="mt-4 text-gray-600 max-w-xl"
+                className="mt-4 text-gray-600 max-w-xl text-center"
               >
-                A compact React+Tailwind landing page with tabbed navigation, scrolling effects, and soft motion using Framer Motion.
+                {t("shortIntro")}
               </motion.p>
 
-              <motion.div className="mt-6 flex gap-3" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }}>
-                <button onClick={() => goTo("features")} className="rounded-lg px-5 py-2 bg-gradient-to-r from-purple-600 to-cyan-500 text-white font-semibold shadow-md hover:scale-[1.01] transform transition">
-                  Explore features
+              <motion.div
+                className="mt-6 flex gap-3 justify-center"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.4 }}
+              >
+                <button
+                  onClick={() => goTo("features")}
+                  className="rounded-lg px-5 py-2 bg-gradient-to-r from-red-500 to-black text-white font-semibold shadow-md hover:scale-[1.01] transform transition"
+                >
+                {t("btnOrder")}
                 </button>
-                <button onClick={() => goTo("gallery")} className="rounded-lg px-5 py-2 border border-gray-200 text-gray-700 hover:bg-gray-50 transition">
-                  View gallery
+                <button
+                  onClick={() => goTo("contact")}
+                  className="rounded-lg px-5 py-2 border border-gray-200 text-gray-700 hover:bg-gray-50 transition"
+                  >
+                  {t("btnServices")}
                 </button>
               </motion.div>
             </div>
@@ -138,13 +156,23 @@ export function Home() {
         </section>
 
         {/* FEATURES */}
-        <section id="features" ref={(el) => (sectionRefs.current["features"] = el)} className="min-h-[70vh] py-24">
+        <section
+          id="features"
+          ref={(el) => (sectionRefs.current["features"] = el)}
+          className="min-h-[70vh] py-24"
+        >
           <div className="max-w-6xl mx-auto px-6">
             <h2 className="text-3xl font-bold mb-6">Features</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {featureCards.map((f, i) => (
-                <motion.div key={f.title} whileHover={{ y: -6 }} className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-lg transition">
-                  <div className="w-12 h-12 rounded-lg flex items-center justify-center bg-gray-50 mb-4">{f.icon}</div>
+                <motion.div
+                  key={f.title}
+                  whileHover={{ y: -6 }}
+                  className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-lg transition"
+                >
+                  <div className="w-12 h-12 rounded-lg flex items-center justify-center bg-gray-50 mb-4">
+                    {f.icon}
+                  </div>
                   <h3 className="font-semibold">{f.title}</h3>
                   <p className="mt-2 text-sm text-gray-500">{f.text}</p>
                 </motion.div>
@@ -154,7 +182,11 @@ export function Home() {
         </section>
 
         {/* GALLERY */}
-        <section id="gallery" ref={(el) => (sectionRefs.current["gallery"] = el)} className="min-h-[70vh] py-24 bg-gradient-to-b from-white to-gray-50">
+        <section
+          id="gallery"
+          ref={(el) => (sectionRefs.current["gallery"] = el)}
+          className="min-h-[70vh] py-24 bg-gradient-to-b from-white to-gray-50"
+        >
           <div className="max-w-6xl mx-auto px-6">
             <h2 className="text-3xl font-bold mb-6">Gallery</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -166,10 +198,16 @@ export function Home() {
                   viewport={{ once: true, amount: 0.2 }}
                   className="rounded-xl overflow-hidden shadow-md bg-white"
                 >
-                  <img src={img} alt={`gallery ${idx}`} className="w-full h-48 object-cover" />
+                  <img
+                    src={img}
+                    alt={`gallery ${idx}`}
+                    className="w-full h-48 object-cover"
+                  />
                   <div className="p-4">
                     <div className="font-medium">Sample image #{idx + 1}</div>
-                    <div className="text-sm text-gray-500">A pleasant thumbnail with subtle depth.</div>
+                    <div className="text-sm text-gray-500">
+                      A pleasant thumbnail with subtle depth.
+                    </div>
                   </div>
                 </motion.div>
               ))}
@@ -178,7 +216,11 @@ export function Home() {
         </section>
 
         {/* CONTACT */}
-        <section id="contact" ref={(el) => (sectionRefs.current["contact"] = el)} className="min-h-[50vh] py-24">
+        <section
+          id="contact"
+          ref={(el) => (sectionRefs.current["contact"] = el)}
+          className="min-h-[50vh] py-24"
+        >
           <div className="max-w-4xl mx-auto px-6">
             <h2 className="text-3xl font-bold mb-6">Get in touch</h2>
             <motion.form
@@ -188,34 +230,92 @@ export function Home() {
               className="grid grid-cols-1 md:grid-cols-2 gap-4"
               onSubmit={(e) => e.preventDefault()}
             >
-              <input className="col-span-1 md:col-span-2 rounded-lg border p-3" placeholder="Your name" />
+              <input
+                className="col-span-1 md:col-span-2 rounded-lg border p-3"
+                placeholder="Your name"
+              />
               <input className="rounded-lg border p-3" placeholder="Email" />
               <input className="rounded-lg border p-3" placeholder="Subject" />
-              <textarea className="col-span-1 md:col-span-2 rounded-lg border p-3 h-32" placeholder="Message" />
+              <textarea
+                className="col-span-1 md:col-span-2 rounded-lg border p-3 h-32"
+                placeholder="Message"
+              />
               <div className="col-span-1 md:col-span-2">
-                <button className="rounded-lg px-5 py-2 bg-gradient-to-r from-purple-600 to-cyan-500 text-white font-semibold shadow-md">Send message</button>
+                <button className="rounded-lg px-5 py-2 bg-gradient-to-r from-purple-600 to-cyan-500 text-white font-semibold shadow-md">
+                  Send message
+                </button>
               </div>
             </motion.form>
           </div>
         </section>
 
         <footer className="py-8">
-          <div className="max-w-6xl mx-auto px-6 text-center text-sm text-gray-500">© {new Date().getFullYear()} Aurora UI — built with React + Tailwind + Framer Motion</div>
+          <div className="max-w-6xl mx-auto px-6 text-center text-sm text-gray-500">
+            © {new Date().getFullYear()} Tegyünk Jót
+          </div>
         </footer>
       </main>
     </div>
   );
 }
 
-
 /* ----------------- Helper components & data ----------------- */
 
+function LanguageSelector() {
+  const { i18n } = useTranslation();
+
+  function isLanguageHungarian() {
+    const language = localStorage.getItem("lang");
+    return language === "hu" || language === null;
+  }
+
+  function changeLanguageToEnglish() {
+    i18n.changeLanguage("en");
+  }
+
+  function changeLanguageToHungarian() {
+    i18n.changeLanguage("hu");
+  }
+
+  return (
+    <>
+      {isLanguageHungarian() ? (
+        <button
+          className="relative px-2 py-1 font-medium transition-all text-gray-500"
+          onClick={changeLanguageToEnglish}
+        >
+          <ReactCountryFlag
+            countryCode="GB"
+            svg
+            style={{ width: "1.5em", height: "1.5em" }}
+          />
+        </button>
+      ) : (
+        <button
+          className="relative px-2 py-1 font-medium transition-all text-gray-500"
+          onClick={changeLanguageToHungarian}
+        >
+          <ReactCountryFlag
+            countryCode="HU"
+            svg
+            style={{ width: "1.5em", height: "1.5em" }}
+          />
+        </button>
+      )}
+    </>
+  );
+}
+
 function MobileTabs({ sections, active, goTo }) {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   return (
     <div className="relative">
-      <button onClick={() => setOpen((v) => !v)} className="px-3 py-2 bg-white rounded-lg shadow-md">
-        Menu
+      <button
+        onClick={() => setOpen((v) => !v)}
+        className="px-3 py-2 bg-white rounded-lg shadow-md"
+      >
+        {t("menu")}
       </button>
       <AnimatePresence>
         {open && (
@@ -232,13 +332,18 @@ function MobileTabs({ sections, active, goTo }) {
                   goTo(s.id);
                   setOpen(false);
                 }}
-                className={`w-full text-left px-2 py-2 rounded-md ${active === s.id ? "bg-gray-100 font-semibold" : "text-gray-600"}`}
+                className={`w-full text-left px-2 py-2 rounded-md ${
+                  active === s.id
+                    ? "bg-gray-100 font-semibold"
+                    : "text-gray-600"
+                }`}
               >
                 {s.title}
               </button>
             ))}
           </motion.div>
         )}
+        <LanguageSelector />
       </AnimatePresence>
     </div>
   );
@@ -247,6 +352,7 @@ function MobileTabs({ sections, active, goTo }) {
 function ParallaxThumbnail() {
   // A thumbnail card with layered parallax using mouse movement
   const ref = useRef(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const el = ref.current;
@@ -272,10 +378,13 @@ function ParallaxThumbnail() {
       className="relative w-full max-w-md rounded-3xl p-1"
       style={{ transformStyle: "preserve-3d" }}
     >
-      <div className="rounded-3xl overflow-hidden bg-white shadow-2xl" style={{ transform: "translateZ(0)" }}>
+      <div
+        className="rounded-3xl overflow-hidden bg-white shadow-2xl"
+        style={{ transform: "translateZ(0)" }}
+      >
         <div className="relative h-64">
           <img
-            src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1400&auto=format&fit=crop&ixlib=rb-4.0.3&s=0d6a7f3b2b2f0c1f6c9a7b8f9052b6b7"
+            src={thumbnail}
             alt="thumbnail"
             className="w-full h-full object-cover"
             style={{ transform: "translateZ(0)" }}
@@ -285,12 +394,16 @@ function ParallaxThumbnail() {
           <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
 
           {/* badge */}
-          <div className="absolute left-4 bottom-4 px-3 py-2 rounded-full bg-white/80 backdrop-blur text-sm font-semibold shadow">Thumbnail</div>
+          <div className="absolute left-4 bottom-4 px-3 py-2 rounded-full bg-white/80 backdrop-blur text-sm font-semibold shadow">
+            {t("thumbnailBadge")}
+          </div>
         </div>
 
         <div className="p-4">
-          <div className="font-semibold text-lg">Stunning thumbnail</div>
-          <p className="text-sm text-gray-500 mt-1">Hover, move the mouse and see the subtle parallax.</p>
+          <div className="font-semibold text-lg">{t("thumbnailTitle")}</div>
+          <p className="text-sm text-gray-500 mt-1">
+            {t("thumbnailDescription")}
+          </p>
         </div>
       </div>
 
@@ -299,19 +412,31 @@ function ParallaxThumbnail() {
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.08 }}
-        className="absolute -right-8 -top-6 w-20 h-20 rounded-2xl bg-gradient-to-br from-purple-400 to-cyan-300 shadow-lg flex items-center justify-center text-white font-bold"
+        className="absolute -right-8 -top-6 w-20 h-20 rounded-2xl bg-gradient-to-br from-red-500 to-black shadow-lg flex items-center justify-center text-white font-bold"
         style={{ transform: "translateZ(40px)" }}
       >
-        +24
+        +3
       </motion.div>
     </motion.div>
   );
 }
 
 const featureCards = [
-  { title: "Smooth tabs & scroll", text: "Animated tab underline and scrollspy for an intuitive nav.", icon: "✨" },
-  { title: "Parallax thumbnails", text: "Layered images with hover parallax and mouse tracking.", icon: "🖼️" },
-  { title: "Framer Motion", text: "Soft, natural motion for entrance and micro-interactions.", icon: "⚡" },
+  {
+    title: "Smooth tabs & scroll",
+    text: "Animated tab underline and scrollspy for an intuitive nav.",
+    icon: "✨",
+  },
+  {
+    title: "Parallax thumbnails",
+    text: "Layered images with hover parallax and mouse tracking.",
+    icon: "🖼️",
+  },
+  {
+    title: "Framer Motion",
+    text: "Soft, natural motion for entrance and micro-interactions.",
+    icon: "⚡",
+  },
 ];
 
 const galleryImages = [

@@ -2,6 +2,7 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 import { AppRoutes } from './routes/AppRoutes';
+import "./multilanguage/i18n";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
