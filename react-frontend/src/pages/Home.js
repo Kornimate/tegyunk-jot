@@ -5,15 +5,18 @@ import { useTranslation } from "react-i18next";
 import { LanguageSelector } from "../components/LanguageSelector";
 import { MobileTabs } from "../components/MobileTabs";
 import { ParallaxThumbnail } from "../components/ParallaxThumbnail";
+import { PricingList } from "../components/PricingList";
+import { Announcement } from "../components/Announcement";
 
 export function Home() {
   const { t } = useTranslation();
 
   const sections = [
-    { id: "home", title: "Kezdőlap" },
-    { id: "services", title: "Információ" },
-    { id: "gallery", title: "Galéria" },
-    { id: "contact", title: "Kapcsolat" },
+    { id: "home", title: t("startPage") },
+    { id: "services", title: t("services") },
+    { id: "pricing", title: t("pricing") },
+    { id: "about", title: t("about") },
+    { id: "contact", title: t("contact") }
   ];
 
   const featureCards = [
@@ -185,7 +188,7 @@ export function Home() {
           </div>
         </section>
 
-        {/* FEATURES */}
+        {/* SERVICES */}
         <section
           id="features"
           ref={(el) => (sectionRefs.current["services"] = el)}
@@ -211,6 +214,23 @@ export function Home() {
                 </motion.div>
               ))}
             </div>
+          </div>
+        </section>
+
+        {/* PRICING */}
+        <section
+          id="pricing"
+          ref={(el) => (sectionRefs.current["pricing"] = el)}
+          className="min-h-[70vh] py-24"
+        >
+          <div className="max-w-6xl mx-auto px-6">
+            <h2 className="text-3xl font-bold mb-6">{t("pricingTitle")}</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 place-items-center">
+              <PricingList />
+            </div>
+            <Announcement type="info" message={t("infoAboutPrices")} extraStyle="mb-4 mt-10" />
+            <Announcement type="info" message={t("infoAboutFlexibility")} extraStyle="mt-4" />
+            <Announcement type="warning" message={t("infoAboutReliability")} extraStyle="mt-4" />
           </div>
         </section>
 

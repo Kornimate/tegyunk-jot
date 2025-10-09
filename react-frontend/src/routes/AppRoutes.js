@@ -10,7 +10,7 @@ import { NotFound } from "../pages/NotFound";
 
 export const AppRoutes = () => {
   return (
-    <Router>
+    <Router basename="/tegyunk-jot">
       <Routes>
         <Route path="/" element={<VisitorLayout />}>
           <Route index element={<Home />} />

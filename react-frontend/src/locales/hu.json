@@ -4,9 +4,11 @@
   "startPage": "Kezdőlap",
   "services": "Szolgáltatások",
   "pricing": "Árak",
-  "contact": "Kontakt",
+  "about": "Rólunk",
+  "contact": "Kapcsolat",
   "menu": "Menü",
   "title": "Kórházi ágy és térdhajlító gép bérbeadás",
+  "longIntro": "Kórházi ágyak és térdhajlító (CPM) gépek rövid- vagy hosszútávú bérlése - házhoz szállítással, összeszereléssel és betanítással.",
   "shortIntro": "Kényelmes, biztonságos és gyors megoldás otthoni rehabilitációhoz.",
   "thumbnailBadge": "Ágy bérlés",
   "thumbnailTitle": "Kórházi ágy bérlés",
@@ -22,5 +24,14 @@
   "featureShippingDesc": "Gyors kiszállítás, az eszközök beállítása a helyszínen, használati útmutató és gyakorlati betanítás.",
   "featureCleaningTitle": "Professzionális fertőtlenítés és karbantartás",
   "featureCleaningDesc": "Minden eszközt átadást megelőzően tisztítunk és fertőtlenítünk. Karbantartási és hibajavítási szolgáltatás elérhető.",
-  "longIntro": "Kórházi ágyak és térdhajlító (CPM) gépek rövid- vagy hosszútávú bérlése - házhoz szállítással, összeszereléssel és betanítással."
+  "pricingTitle": "Árak",
+  "pricingBedTitle": "Kórházi ágy",
+  "pricingBedPriceType": "Havi díj",
+  "pricingBedExtraText": "Egyszeri szállítási/összeszerelési díj: 6 000-12 000 HUF",
+  "pricingCPMTitle": "Térdhajlító (CPM) gép",
+  "pricingCPMPriceType1": "Napi díj",
+  "pricingCPMPriceType2": "Heti díj",
+  "infoAboutPrices": "Az alábbi árak tájékoztató jellegűek — a pontos díj a bérleti időtől és a szolgáltatásoktól függ.",
+  "infoAboutFlexibility": "Kaució: az eszköz értékének függvényében (példa érték: 30 000 - 100 000 HUF). Rugalmas csomagok kérhetők.",
+  "infoAboutReliability": "A szövegek a weboldalon tájékoztató jellegűek. A végleges árak és szerződéses feltételek a szerződésben kerülnek rögzítésre. Orvosi beállítást mindig az orvos vagy gyógytornász javaslata szerint végezzünk."
 }

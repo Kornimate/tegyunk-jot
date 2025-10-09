@@ -4,10 +4,12 @@
   "startPage": "Home",
   "services": "Services",
   "pricing": "Pricing",
+  "about": "About Us",
   "contact": "Contact",
   "menu": "Menu",
   "title": "Hospital bed and knee flexion machine rental",
   "shortIntro": "A comfortable, safe, and fast solution for home rehabilitation.",
+  "longIntro": "Short- or long-term rental of hospital beds and knee flexion (CPM) machines - with home delivery, assembly, and training.",
   "thumbnailBadge": "Rent a bed",
   "thumbnailTitle": "Rent a hospital bed",
   "thumbnailDescription": "Hospital bed rental with home delivery, assembly, and training.",
@@ -22,5 +24,14 @@
   "featureShippingDesc": "Fast delivery, on-site setup of equipment, user manual, and practical training.",
   "featureCleaningTitle": "Professional disinfection and maintenance",
   "featureCleaningDesc": "All equipment is cleaned and disinfected before delivery. Maintenance and repair services are available.",
-  "longIntro": "Short- or long-term rental of hospital beds and knee flexion (CPM) machines - with home delivery, assembly, and training."
+  "pricingTitle": "Pricing",
+  "pricingBedTitle": "Hospital bed",
+  "pricingBedPriceType": "Monthly fee",
+  "pricingBedExtraText": "One-time delivery/assembly fee: 6,000-12,000 HUF",
+  "pricingCPMTitle": "Knee flexion (CPM) machine",
+  "pricingCPMPriceType1": "Daily fee",
+  "pricingCPMPriceType2": "Weekly fee",
+  "infoAboutPrices": "The prices below are for informational purposes only — the exact fee depends on the rental period and services.",
+  "infoAboutFlexibility": "Deposit: depending on the value of the device (example value: 30,000 - 100,000 HUF). Flexible packages are available.",
+  "infoAboutReliability": "The texts one this website are for informational purposes only. The final prices and contractual terms and conditions will be specified in the contract. Medical adjustments should always be made in accordance with the recommendations of a doctor or physiotherapist."
 }
