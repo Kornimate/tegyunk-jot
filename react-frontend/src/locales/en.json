@@ -13,5 +13,14 @@
   "thumbnailDescription": "Hospital bed rental with home delivery, assembly, and training.",
   "btnOrder": "Send a Request",
   "btnServices": "Services",
+  "servicesTitle": "Services",
+  "featureBedTitle": "Hospital bed rental",
+  "featureBedDesc": "- Electric and mechanical design, adjustable height and headrest.<br />- Accessories: mattress, safety rails, mobility aids.",
+  "featureCRMTitle": "Knee flexion (CPM) machine rental",
+  "featureCRMDesc": "- Adjustable speed and range according to the attending physician/recommendation. <br />- Training in use and support for daily/weekly needs.",
+  "featureShippingTitle": "Home delivery, assembly, and training",
+  "featureShippingDesc": "Fast delivery, on-site setup of equipment, user manual, and practical training.",
+  "featureCleaningTitle": "Professional disinfection and maintenance",
+  "featureCleaningDesc": "All equipment is cleaned and disinfected before delivery. Maintenance and repair services are available.",
   "longIntro": "Short- or long-term rental of hospital beds and knee flexion (CPM) machines - with home delivery, assembly, and training."
 }

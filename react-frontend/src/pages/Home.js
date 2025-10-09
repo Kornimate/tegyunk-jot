@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import logo from "../resources/logo_no_text.png";
-import thumbnail from "../resources/thumbnail.jpg";
 import { useTranslation } from "react-i18next";
-import ReactCountryFlag from "react-country-flag";
+import { LanguageSelector } from "../components/LanguageSelector";
+import { MobileTabs } from "../components/MobileTabs";
+import { ParallaxThumbnail } from "../components/ParallaxThumbnail";
 
 export function Home() {
   const { t } = useTranslation();
@@ -13,6 +14,29 @@ export function Home() {
     { id: "services", title: "Információ" },
     { id: "gallery", title: "Galéria" },
     { id: "contact", title: "Kapcsolat" },
+  ];
+
+  const featureCards = [
+    {
+      title: t("featureBedTitle"),
+      text: t("featureBedDesc"),
+      icon: "🛏️",
+    },
+    {
+      title: t("featureCRMTitle"),
+      text: t("featureCRMDesc"),
+      icon: "⚙️",
+    },
+    {
+      title: t("featureShippingTitle"),
+      text: t("featureShippingDesc"),
+      icon: "🚚",
+    },
+    {
+      title: t("featureCleaningTitle"),
+      text: t("featureCleaningDesc"),
+      icon: "✨",
+    },
   ];
 
   const sectionRefs = useRef({});
@@ -57,7 +81,13 @@ export function Home() {
           >
             <div className="w-10 h-10 flex items-center justify-center p-[3px] rounded-md bg-gradient-to-r from-red-500 to-black">
               {/* logo */}
-              <img width="120" height="120" src={logo} alt="logo" className="rounded" />
+              <img
+                width="120"
+                height="120"
+                src={logo}
+                alt="logo"
+                className="rounded"
+              />
             </div>
             <div className="hidden sm:block">
               <div className="text-sm font-semibold">{t("companyName")}</div>
@@ -124,7 +154,7 @@ export function Home() {
                 transition={{ delay: 0.2 }}
                 className="mt-4 text-gray-600 max-w-xl text-center"
               >
-                {t("shortIntro")}
+                {t("shortIntro") + " " + t("longIntro")}
               </motion.p>
 
               <motion.div
@@ -134,15 +164,15 @@ export function Home() {
                 transition={{ delay: 0.4 }}
               >
                 <button
-                  onClick={() => goTo("features")}
+                  onClick={() => goTo("contact")}
                   className="rounded-lg px-5 py-2 bg-gradient-to-r from-red-500 to-black text-white font-semibold shadow-md hover:scale-[1.01] transform transition"
                 >
-                {t("btnOrder")}
+                  {t("btnOrder")}
                 </button>
                 <button
-                  onClick={() => goTo("contact")}
+                  onClick={() => goTo("services")}
                   className="rounded-lg px-5 py-2 border border-gray-200 text-gray-700 hover:bg-gray-50 transition"
-                  >
+                >
                   {t("btnServices")}
                 </button>
               </motion.div>
@@ -158,13 +188,13 @@ export function Home() {
         {/* FEATURES */}
         <section
           id="features"
-          ref={(el) => (sectionRefs.current["features"] = el)}
+          ref={(el) => (sectionRefs.current["services"] = el)}
           className="min-h-[70vh] py-24"
         >
           <div className="max-w-6xl mx-auto px-6">
-            <h2 className="text-3xl font-bold mb-6">Features</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {featureCards.map((f, i) => (
+            <h2 className="text-3xl font-bold mb-6">{t("servicesTitle")}</h2>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+              {featureCards.map((f, _) => (
                 <motion.div
                   key={f.title}
                   whileHover={{ y: -6 }}
@@ -174,7 +204,10 @@ export function Home() {
                     {f.icon}
                   </div>
                   <h3 className="font-semibold">{f.title}</h3>
-                  <p className="mt-2 text-sm text-gray-500">{f.text}</p>
+                  <p
+                    className="mt-2 text-sm text-gray-500"
+                    dangerouslySetInnerHTML={{ __html: f.text }}
+                  ></p>
                 </motion.div>
               ))}
             </div>
@@ -241,7 +274,7 @@ export function Home() {
                 placeholder="Message"
               />
               <div className="col-span-1 md:col-span-2">
-                <button className="rounded-lg px-5 py-2 bg-gradient-to-r from-purple-600 to-cyan-500 text-white font-semibold shadow-md">
+                <button className="rounded-lg px-5 py-2 bg-gradient-to-r from-red-500 to-black text-white font-semibold shadow-md">
                   Send message
                 </button>
               </div>
@@ -260,184 +293,6 @@ export function Home() {
 }
 
 /* ----------------- Helper components & data ----------------- */
-
-function LanguageSelector() {
-  const { i18n } = useTranslation();
-
-  function isLanguageHungarian() {
-    const language = localStorage.getItem("lang");
-    return language === "hu" || language === null;
-  }
-
-  function changeLanguageToEnglish() {
-    i18n.changeLanguage("en");
-  }
-
-  function changeLanguageToHungarian() {
-    i18n.changeLanguage("hu");
-  }
-
-  return (
-    <>
-      {isLanguageHungarian() ? (
-        <button
-          className="relative px-2 py-1 font-medium transition-all text-gray-500"
-          onClick={changeLanguageToEnglish}
-        >
-          <ReactCountryFlag
-            countryCode="GB"
-            svg
-            style={{ width: "1.5em", height: "1.5em" }}
-          />
-        </button>
-      ) : (
-        <button
-          className="relative px-2 py-1 font-medium transition-all text-gray-500"
-          onClick={changeLanguageToHungarian}
-        >
-          <ReactCountryFlag
-            countryCode="HU"
-            svg
-            style={{ width: "1.5em", height: "1.5em" }}
-          />
-        </button>
-      )}
-    </>
-  );
-}
-
-function MobileTabs({ sections, active, goTo }) {
-  const { t } = useTranslation();
-  const [open, setOpen] = useState(false);
-  return (
-    <div className="relative">
-      <button
-        onClick={() => setOpen((v) => !v)}
-        className="px-3 py-2 bg-white rounded-lg shadow-md"
-      >
-        {t("menu")}
-      </button>
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            initial={{ opacity: 0, y: -8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg p-3"
-          >
-            {sections.map((s) => (
-              <button
-                key={s.id}
-                onClick={() => {
-                  goTo(s.id);
-                  setOpen(false);
-                }}
-                className={`w-full text-left px-2 py-2 rounded-md ${
-                  active === s.id
-                    ? "bg-gray-100 font-semibold"
-                    : "text-gray-600"
-                }`}
-              >
-                {s.title}
-              </button>
-            ))}
-          </motion.div>
-        )}
-        <LanguageSelector />
-      </AnimatePresence>
-    </div>
-  );
-}
-
-function ParallaxThumbnail() {
-  // A thumbnail card with layered parallax using mouse movement
-  const ref = useRef(null);
-  const { t } = useTranslation();
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-
-    function onMove(e) {
-      const rect = el.getBoundingClientRect();
-      const x = (e.clientX - rect.left) / rect.width - 0.5;
-      const y = (e.clientY - rect.top) / rect.height - 0.5;
-
-      el.style.setProperty("--mx", String(x * 18));
-      el.style.setProperty("--my", String(y * 12));
-    }
-
-    window.addEventListener("mousemove", onMove);
-    return () => window.removeEventListener("mousemove", onMove);
-  }, []);
-
-  return (
-    <motion.div
-      ref={ref}
-      whileHover={{ scale: 1.02 }}
-      className="relative w-full max-w-md rounded-3xl p-1"
-      style={{ transformStyle: "preserve-3d" }}
-    >
-      <div
-        className="rounded-3xl overflow-hidden bg-white shadow-2xl"
-        style={{ transform: "translateZ(0)" }}
-      >
-        <div className="relative h-64">
-          <img
-            src={thumbnail}
-            alt="thumbnail"
-            className="w-full h-full object-cover"
-            style={{ transform: "translateZ(0)" }}
-          />
-
-          {/* layered gradient */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
-
-          {/* badge */}
-          <div className="absolute left-4 bottom-4 px-3 py-2 rounded-full bg-white/80 backdrop-blur text-sm font-semibold shadow">
-            {t("thumbnailBadge")}
-          </div>
-        </div>
-
-        <div className="p-4">
-          <div className="font-semibold text-lg">{t("thumbnailTitle")}</div>
-          <p className="text-sm text-gray-500 mt-1">
-            {t("thumbnailDescription")}
-          </p>
-        </div>
-      </div>
-
-      {/* floating accent */}
-      <motion.div
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.08 }}
-        className="absolute -right-8 -top-6 w-20 h-20 rounded-2xl bg-gradient-to-br from-red-500 to-black shadow-lg flex items-center justify-center text-white font-bold"
-        style={{ transform: "translateZ(40px)" }}
-      >
-        +3
-      </motion.div>
-    </motion.div>
-  );
-}
-
-const featureCards = [
-  {
-    title: "Smooth tabs & scroll",
-    text: "Animated tab underline and scrollspy for an intuitive nav.",
-    icon: "✨",
-  },
-  {
-    title: "Parallax thumbnails",
-    text: "Layered images with hover parallax and mouse tracking.",
-    icon: "🖼️",
-  },
-  {
-    title: "Framer Motion",
-    text: "Soft, natural motion for entrance and micro-interactions.",
-    icon: "⚡",
-  },
-];
 
 const galleryImages = [
   "https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=abc",

@@ -13,5 +13,14 @@
   "thumbnailDescription": "Kórházi ágyak bérlése házhoz szállítással, összeszereléssel és betanítással.",
   "btnOrder": "Ajánlatkérés",
   "btnServices": "Szolgáltatások",
+  "servicesTitle": "Szolgáltatások",
+  "featureBedTitle": "Kórházi ágy bérlése",
+  "featureBedDesc": "- Elektromos és mechanikus kivitel, állítható magasság és fejrész. <br />- Kiegészítők: matrac, leesésgátló korlátok, mobilitást segítő kiegészítők.",
+  "featureCRMTitle": "Térdhajlító (CPM) gép bérlése",
+  "featureCRMDesc": "- Beállítható sebesség és tartomány a kezelőorvos/javaslat szerint. <br />- Használati betanítás és napi/heti igény esetén támogatás.",
+  "featureShippingTitle": "Házhoz szállítás, összeszerelés és betanítás",
+  "featureShippingDesc": "Gyors kiszállítás, az eszközök beállítása a helyszínen, használati útmutató és gyakorlati betanítás.",
+  "featureCleaningTitle": "Professzionális fertőtlenítés és karbantartás",
+  "featureCleaningDesc": "Minden eszközt átadást megelőzően tisztítunk és fertőtlenítünk. Karbantartási és hibajavítási szolgáltatás elérhető.",
   "longIntro": "Kórházi ágyak és térdhajlító (CPM) gépek rövid- vagy hosszútávú bérlése - házhoz szállítással, összeszereléssel és betanítással."
 }
