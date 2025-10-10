@@ -124,6 +124,10 @@ export function FAQ() {
     setOpenIds([]);
   }
 
+  function convertTagsToDisplayName(tags){
+    return tags.map((tag) => tagDisplayNamePairs[tag])
+  }
+
   return (
     <div className="max-w-5xl mx-auto px-4 pt-10">
       <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -142,14 +146,14 @@ export function FAQ() {
                   setActiveTag("");
                 }}
                 className="px-3 py-2 text-sm rounded-md bg-gray-50 border border-gray-200 hover:bg-gray-100"
-                title="Törlés"
+                title="delete"
               >
                 {t("btnDelete")}
               </button>
               <button
                 onClick={() => openAll()}
                 className="px-3 py-2 text-sm rounded-md bg-indigo-600 text-white hover:brightness-110"
-                title="Összes megnyitása"
+                title="openAll"
               >
                 {t("btnAll")}
               </button>
@@ -180,7 +184,7 @@ export function FAQ() {
                     : "bg-gray-100 text-gray-700"
                 }`}
               >
-                {t}
+                {tagDisplayNamePairs[t]}
               </button>
             ))}
           </div>
@@ -189,7 +193,7 @@ export function FAQ() {
 
       <div className="space-y-3">
         {filtered.length === 0 && (
-          <div className="text-center py-8 text-gray-500">Nincs találat.</div>
+          <div className="text-center py-8 text-gray-500">{t("noResult")}</div>
         )}
 
         {filtered.map((f, idx) => {
@@ -213,7 +217,7 @@ export function FAQ() {
                           {f.q}
                         </h3>
                         <div className="mt-1 text-sm text-gray-500">
-                          {(f.tags || []).join(" • ")}
+                          {(convertTagsToDisplayName(f.tags) || []).join(" • ")}
                         </div>
                       </div>
 

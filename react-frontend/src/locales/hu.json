@@ -61,5 +61,15 @@
   "q7": "Mi van, ha meghibásodik az eszköz?",
   "a7": "Gyors szervizt vagy cserét biztosítunk a bérleti szerződésben foglalt feltételek szerint.",
   "q8": "Milyen fertőtlenítési protokollt követtek?",
-  "a8": "ISO-szerű higiéniai eljárásokat alkalmazunk: alapos tisztítás, speciális fertőtlenítőszer és dokumentált ellenőrzés."
+  "a8": "ISO-szerű higiéniai eljárásokat alkalmazunk: alapos tisztítás, speciális fertőtlenítőszer és dokumentált ellenőrzés.",
+  "transport": "Kiszállítás",
+  "prices": "Árak",
+  "support": "Ügyfélszolgálat",
+  "assembly": "Összeszerelés",
+  "CPM": "CPM gép",
+  "hospitalBed": "Kórházi ágy",
+  "failure": "Meghibásodás",
+  "cleaning": "Takarítás",
+  "rental": "Bérlés",
+  "duration": "Időtartam"
 }

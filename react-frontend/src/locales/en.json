@@ -61,5 +61,15 @@
   "q7": "What happens if the device malfunctions?",
   "a7": "We provide prompt service or replacement in accordance with the terms of the rental agreement.",
   "q8": "What disinfection protocol do you follow?",
-  "a8": "We use ISO-compliant hygiene procedures: thorough cleaning, special disinfectants, and documented checks."
+  "a8": "We use ISO-compliant hygiene procedures: thorough cleaning, special disinfectants, and documented checks.",
+  "transport": "Delivery",
+  "prices": "Prices",
+  "support": "Customer service",
+  "assembly": "Assembly",
+  "CPM": "CPM machine",
+  "hospitalBed": "Hospital bed",
+  "failure": "Failure",
+  "cleaning": "Cleaning",
+  "rental": "Rental",
+  "duration": "Duration"
 }
