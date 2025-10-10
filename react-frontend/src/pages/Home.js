@@ -59,7 +59,7 @@ export function Home() {
           }
         });
       },
-      { root: null, rootMargin: "0px 0px -60% 0px", threshold: 0.25 }
+      { root: null, rootMargin: "0px 0px -50% 0px", threshold: 0.25 }
     );
 
     sections.forEach((s) => {
@@ -71,7 +71,7 @@ export function Home() {
   });
 
   function goTo(id) {
-    const yOffset = -100;
+    const yOffset = -20;
     const el = sectionRefs.current[id];
     if (!el) return;
     const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
@@ -277,7 +277,7 @@ export function Home() {
         <section
           id="faq"
           ref={(el) => (sectionRefs.current["faq"] = el)}
-          className="min-h-[70vh] py-24"
+          className="min-h-[70vh] py-10"
         >
           <div className="max-w-6xl mx-auto px-6">
             <h2 className="text-3xl font-bold mb-6">{t("faqTitle")}</h2>
