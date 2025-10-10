@@ -262,7 +262,9 @@ export function Home() {
           <div className="max-w-6xl mx-auto px-6">
             <h2 className="text-3xl font-bold mb-6">{t("aboutTitle")}</h2>
             <motion.div>{t("aboutDesc")}</motion.div>
-            <h2 className="text-2xl font-bold mt-10 mb-4">{t("processTitle")}</h2>
+            <h2 className="text-2xl font-bold mt-10 mb-4">
+              {t("processTitle")}
+            </h2>
             <motion.div
               dangerouslySetInnerHTML={{ __html: t("processDesc") }}
             ></motion.div>
@@ -302,8 +304,19 @@ export function Home() {
                 className="col-span-1 md:col-span-2 rounded-lg border p-3"
                 placeholder="Your name"
               />
-              <input className="rounded-lg border p-3" placeholder="Email" />
-              <input className="rounded-lg border p-3" placeholder="Subject" />
+              <input
+                className="col-span-1 md:col-span-2 rounded-lg border p-3"
+                placeholder="Email"
+              />
+              <input
+                className="col-span-1 md:col-span-2 rounded-lg border p-3"
+                placeholder="Phone"
+              />
+              <input
+                type="date"
+                className="col-span-1 md:col-span-2 rounded-lg border p-3"
+                placeholder="Start Date"
+              />
               <textarea
                 className="col-span-1 md:col-span-2 rounded-lg border p-3 h-32"
                 placeholder="Message"
