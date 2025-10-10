@@ -7,7 +7,7 @@ import { MobileTabs } from "../components/MobileTabs";
 import { ParallaxThumbnail } from "../components/ParallaxThumbnail";
 import { PricingList } from "../components/PricingList";
 import { Announcement } from "../components/Announcement";
-import FeedbackList from "../components/Feedback";
+import { FeedbackList } from "../components/FeedbackList";
 import { FAQ } from "../components/FAQ";
 import { Profile } from "../components/Profile";
 

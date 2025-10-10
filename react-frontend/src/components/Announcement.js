@@ -1,4 +1,9 @@
-export function Announcement({ type = "info", message, extraStyle }) {
+export function Announcement({
+  type = "info",
+  message,
+  extraStyle,
+  closable = false,
+}) {
   // Tailwind colors for different types
   const typeClasses = {
     info: "bg-gray-300 text-gray-800 border-gray-500",
@@ -12,6 +17,14 @@ export function Announcement({ type = "info", message, extraStyle }) {
       className={`flex items-center justify-between px-4 py-3 border-l-4 rounded-md ${typeClasses[type]} ${extraStyle}`}
     >
       <span>{message}</span>
+      {closable && (
+        <button
+          onClick={(e) => e.target.parentElement.remove()}
+          className="text-xl font-bold leading-none hover:text-opacity-70"
+        >
+          &times;
+        </button>
+      )}
     </div>
   );
 }
