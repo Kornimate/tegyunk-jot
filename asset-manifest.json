@@ -1,18 +1,18 @@
 {
   "files": {
-    "main.css": "/tegyunk-jot/static/css/main.3a1dc5aa.css",
-    "main.js": "/tegyunk-jot/static/js/main.5f2fa042.js",
+    "main.css": "/tegyunk-jot/static/css/main.fad03053.css",
+    "main.js": "/tegyunk-jot/static/js/main.0a6f021c.js",
     "static/js/453.28b203fe.chunk.js": "/tegyunk-jot/static/js/453.28b203fe.chunk.js",
     "static/media/logo_no_text.png": "/tegyunk-jot/static/media/logo_no_text.1520c975bf5d2f44decb.png",
     "static/media/thumbnail.jpg": "/tegyunk-jot/static/media/thumbnail.8d689be75a46eccf2f52.jpg",
     "static/media/cpm_thumbnail.jpg": "/tegyunk-jot/static/media/cpm_thumbnail.33a294d125c2253ed0d1.jpg",
     "index.html": "/tegyunk-jot/index.html",
-    "main.3a1dc5aa.css.map": "/tegyunk-jot/static/css/main.3a1dc5aa.css.map",
-    "main.5f2fa042.js.map": "/tegyunk-jot/static/js/main.5f2fa042.js.map",
+    "main.fad03053.css.map": "/tegyunk-jot/static/css/main.fad03053.css.map",
+    "main.0a6f021c.js.map": "/tegyunk-jot/static/js/main.0a6f021c.js.map",
     "453.28b203fe.chunk.js.map": "/tegyunk-jot/static/js/453.28b203fe.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.3a1dc5aa.css",
-    "static/js/main.5f2fa042.js"
+    "static/css/main.fad03053.css",
+    "static/js/main.0a6f021c.js"
   ]
 }
