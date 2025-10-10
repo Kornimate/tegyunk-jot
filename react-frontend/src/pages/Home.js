@@ -291,42 +291,59 @@ export function Home() {
           ref={(el) => (sectionRefs.current["contact"] = el)}
           className="min-h-[50vh] py-10"
         >
-          <div className="max-w-4xl mx-auto px-6">
-            <h2 className="text-3xl font-bold mb-6">Get in touch</h2>
-            <motion.form
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              className="grid grid-cols-1 md:grid-cols-2 gap-4"
-              onSubmit={(e) => e.preventDefault()}
-            >
-              <input
-                className="col-span-1 md:col-span-2 rounded-lg border p-3"
-                placeholder="Your name"
-              />
-              <input
-                className="col-span-1 md:col-span-2 rounded-lg border p-3"
-                placeholder="Email"
-              />
-              <input
-                className="col-span-1 md:col-span-2 rounded-lg border p-3"
-                placeholder="Phone"
-              />
-              <input
-                type="date"
-                className="col-span-1 md:col-span-2 rounded-lg border p-3"
-                placeholder="Start Date"
-              />
-              <textarea
-                className="col-span-1 md:col-span-2 rounded-lg border p-3 h-32"
-                placeholder="Message"
-              />
-              <div className="col-span-1 md:col-span-2">
-                <button className="rounded-lg px-5 py-2 bg-gradient-to-r from-red-500 to-black text-white font-semibold shadow-md">
-                  Send message
-                </button>
-              </div>
-            </motion.form>
+          <div className="max-w-4xl mx-auto px-4">
+            <h2 className="text-3xl font-bold mb-6">{t("contactTitle")}</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 place-items-center mb-6">
+              <motion.div>{t("contactDesc")}</motion.div>
+              <motion.div
+                className="my-4 rounded-xl overflow-hidden shadow-md bg-white w-full h-full place-content-center font-bold ps-4"
+                dangerouslySetInnerHTML={{ __html: t("contactDetails") }}
+              ></motion.div>
+            </div>
+            <h3 className="text-3xl font-bold mb-6">{t("requestTitle")}</h3>
+            <motion.div className="bg-white/80 backdrop-blur-md rounded-xl p-4 shadow-md border border-gray-100 w-full">
+              <motion.form
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+                className="grid grid-cols-1 md:grid-cols-2 gap-4"
+                onSubmit={(e) => e.preventDefault()}
+              >
+                <label className="text-md font-semibold text-gray-700">
+                  {t("nameLbl")}
+                </label>
+                <input
+                  className="col-span-1 md:col-span-2 rounded-lg border p-3"
+                  placeholder={t("nameLbl")}
+                />
+                <label className="text-md font-semibold text-gray-700">{t("emailLbl")}</label>
+                <input
+                  className="col-span-1 md:col-span-2 rounded-lg border p-3"
+                  placeholder={t("emailLbl")}
+                />
+                <label className="text-md font-semibold text-gray-700">{t("phoneLbl")}</label>
+                <input
+                  className="col-span-1 md:col-span-2 rounded-lg border p-3"
+                  placeholder={t("phoneLbl")}
+                />
+                <label className="text-md font-semibold text-gray-700">{t("startDateLbl")}</label>
+                <input
+                  type="date"
+                  className="col-span-1 md:col-span-2 rounded-lg border p-3"
+                  placeholder="Start Date"
+                />
+                <label className="text-md font-semibold text-gray-700">{t("messageLbl")}</label>
+                <textarea
+                  className="col-span-1 md:col-span-2 rounded-lg border p-3 h-32"
+                  placeholder={t("messagePlaceholder")}
+                />
+                <div className="col-span-1 md:col-span-2 justify-self-end">
+                  <button className="rounded-lg px-5 py-2 bg-gradient-to-r from-red-500 to-black text-white font-semibold shadow-md">
+                    {t("btnSendMessage")}
+                  </button>
+                </div>
+              </motion.form>
+            </motion.div>
           </div>
         </section>
 
