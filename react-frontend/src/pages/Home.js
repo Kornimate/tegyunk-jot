@@ -9,6 +9,7 @@ import { PricingList } from "../components/PricingList";
 import { Announcement } from "../components/Announcement";
 import FeedbackList from "../components/Feedback";
 import { FAQ } from "../components/FAQ";
+import { Profile } from "../components/Profile";
 
 export function Home() {
   const { t } = useTranslation();
@@ -127,6 +128,7 @@ export function Home() {
               </button>
             ))}
             <LanguageSelector />
+            <Profile />
           </nav>
 
           {/* Mobile menu (simple) */}

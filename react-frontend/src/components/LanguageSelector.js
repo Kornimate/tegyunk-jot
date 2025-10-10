@@ -21,7 +21,7 @@ export function LanguageSelector() {
     <>
       {isLanguageHungarian() ? (
         <button
-          className="relative px-2 py-1 font-medium transition-all text-gray-500"
+          className="relative ps-2 py-1 font-medium transition-all text-gray-500"
           onClick={changeLanguageToEnglish}
         >
           <ReactCountryFlag

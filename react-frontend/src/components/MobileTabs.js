@@ -2,6 +2,7 @@ import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { LanguageSelector } from "./LanguageSelector";
+import { Profile } from "./Profile";
 
 export function MobileTabs({ sections, active, goTo }) {
   const { t } = useTranslation();
@@ -38,9 +39,10 @@ export function MobileTabs({ sections, active, goTo }) {
                 {s.title}
               </button>
             ))}
+            <LanguageSelector key="lang" />
+            <Profile key="prof" />
           </motion.div>
         )}
-        <LanguageSelector />
       </AnimatePresence>
     </div>
   );
