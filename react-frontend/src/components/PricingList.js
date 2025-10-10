@@ -14,7 +14,7 @@ export function PricingList() {
       {
         label: t("pricingBedPriceType"),
         value: "18 000 - 35 000 HUF",
-        color: "bg-gray-500 text-white",
+        color: "bg-red-500 text-white",
       },
     ],
     extra: t("pricingBedExtraText"),
@@ -32,7 +32,7 @@ export function PricingList() {
       {
         label: t("pricingCPMPriceType2"),
         value: "8 000 - 18 000 HUF",
-        color: "bg-black text-white",
+        color: "bg-red-500 text-white",
       },
     ],
     extra: "",

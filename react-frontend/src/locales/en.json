@@ -5,6 +5,7 @@
   "services": "Services",
   "pricing": "Pricing",
   "about": "About Us",
+  "faq": "FAQ",
   "contact": "Contact",
   "menu": "Menu",
   "title": "Hospital bed and knee flexion machine rental",
@@ -33,5 +34,16 @@
   "pricingCPMPriceType2": "Weekly fee",
   "infoAboutPrices": "The prices below are for informational purposes only — the exact fee depends on the rental period and services.",
   "infoAboutFlexibility": "Deposit: depending on the value of the device (example value: 30,000 - 100,000 HUF). Flexible packages are available.",
-  "infoAboutReliability": "The texts one this website are for informational purposes only. The final prices and contractual terms and conditions will be specified in the contract. Medical adjustments should always be made in accordance with the recommendations of a doctor or physiotherapist."
+  "infoAboutReliability": "The texts one this website are for informational purposes only. The final prices and contractual terms and conditions will be specified in the contract. Medical adjustments should always be made in accordance with the recommendations of a doctor or physiotherapist.",
+  "aboutTitle": "About us",
+  "aboutDesc": "Our company's goal is to make the post-operative period and home rehabilitation easier and safer. We recommend our services to patients and their relatives who need temporary, professional equipment (hospital beds, CPM machines). All equipment is regularly maintained and undergoes a strict disinfection process before delivery. We provide a short user manual for each product and assist with setup according to medical recommendations.",
+  "processTitle": "Rental process",
+  "processDesc": "1. Request a quote: submit your request (device, duration, address) using the online form or by phone.<br />2. Confirmation and appointment: we confirm the order and arrange a delivery date. <br />3. Delivery and installation: we arrive, assemble the device, set it up, and train you on how to use it.<br />4. Rental period: customer support by phone, quick response in case of urgent malfunctions.<br />5. Return: after the rental period expires, we will pick up the device and disinfect it.",
+  "feedbackTitle": "Previous feedback",
+  "review1": "Fast and helpful service - the bed arrived right on time and our family was relieved.",
+  "review2": "Our return home after the surgery went extremely smoothly thanks to the company's fast and professional work. The hospital bed was set up on time, before we were even transported home. I would like to express my special thanks to the delivery technician for his patient training and meticulous assembly. He was also a great help in setting up the CPM machine, which made the physiotherapist's work much easier. It was reassuring to see that everything was disinfected and in perfect condition. I wholeheartedly recommend it to anyone who wants the most comfortable and safest home rehabilitation possible!",
+  "review3": "Renting the knee flexion machine helped my recovery even more than I expected. The administration and request for a quote over the phone were quick, and the colleague was helpful. The delivery took place at the agreed time, and the machine was clean and worked flawlessly. The only minor thing that prevents me from giving the maximum score is the initial deposit, which seemed a little high at first. Regardless, the quality of the service is undeniable, and home use was painless and easy. The machine really helped a lot with my rehabilitation.",
+  "readmore": "Read more",
+  "showless": "Read less",
+  "faqTitle": "Frequently Asked Questions (FAQ)"
 }

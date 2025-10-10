@@ -5,6 +5,7 @@
   "services": "Szolgáltatások",
   "pricing": "Árak",
   "about": "Rólunk",
+  "faq": "GYIK",
   "contact": "Kapcsolat",
   "menu": "Menü",
   "title": "Kórházi ágy és térdhajlító gép bérbeadás",
@@ -33,5 +34,16 @@
   "pricingCPMPriceType2": "Heti díj",
   "infoAboutPrices": "Az alábbi árak tájékoztató jellegűek — a pontos díj a bérleti időtől és a szolgáltatásoktól függ.",
   "infoAboutFlexibility": "Kaució: az eszköz értékének függvényében (példa érték: 30 000 - 100 000 HUF). Rugalmas csomagok kérhetők.",
-  "infoAboutReliability": "A szövegek a weboldalon tájékoztató jellegűek. A végleges árak és szerződéses feltételek a szerződésben kerülnek rögzítésre. Orvosi beállítást mindig az orvos vagy gyógytornász javaslata szerint végezzünk."
+  "infoAboutReliability": "A szövegek a weboldalon tájékoztató jellegűek. A végleges árak és szerződéses feltételek a szerződésben kerülnek rögzítésre. Orvosi beállítást mindig az orvos vagy gyógytornász javaslata szerint végezzünk.",
+  "aboutTitle": "Rólunk",
+  "aboutDesc": "Cégünk célja, hogy a műtét utáni időszakot és az otthoni rehabilitációt egyszerűbbé és biztonságosabbá tegyük. Szolgáltatásunkat olyan pácienseknek és hozzátartozóiknak ajánljuk, akik ideiglenes, professzionális eszközökre (kórházi ágy, CPM gép) szorulnak. Minden eszközt rendszeresen karbantartunk, és átadás előtt szigorú fertőtlenítési folyamaton viszünk keresztül. Minden termékhez rövid használati útmutatót adunk, és orvosi javaslat szerint segítünk a beállításban.",
+  "processTitle": "Bérlés folyamata",
+  "processDesc": "1. Ajánlatkérés: online űrlapon vagy telefonon leadod az igényedet (eszköz, időtartam, cím).<br />2. Visszaigazolás és időpont egyeztetés: megerősítjük a rendelést és egyeztetjük a kiszállítás időpontját.<br />3. Kiszállítás és beüzemelés: odaérünk, összeszereljük az eszközt, beállítjuk és betanítjuk a használatot.<br />4. Bérleti időszak: ügyféltámogatás telefonon, sürgős hiba esetén gyors reagálás.<br />5. Visszaszállítás: a bérleti idő lejárta után elszállítjuk és elvégezzük a fertőtlenítést.",
+  "feedbackTitle": "Korábbi visszajelzések",
+  "review1": "„Gyors és segítőkész szolgáltatás - az ágy pontosan időben érkezett és a családunk megnyugodott.”",
+  "review2": "A műtét utáni hazatérésünk rendkívül zökkenőmentesen zajlott, köszönhetően a cég gyors és professzionális munkájának. A kórházi ágyat időben, már a hazaszállítás előtt beüzemelték. Külön köszönöm a kiszálló szakembernek a türelmes betanítást és az aprólékos összeszerelést. A CPM gép beállításánál is nagy segítséget nyújtott, ami jelentősen megkönnyítette a gyógytornász munkáját. Megnyugtató érzés volt látni, hogy minden fertőtlenített és tökéletes állapotban van. Mindenkinek szívből ajánlom, aki a lehető legkényelmesebb és legbiztonságosabb otthoni rehabilitációra vágyik!",
+  "review3": "A térdhajlító gép bérlése a vártnál is jobban támogatta a gyógyulásomat. Az ügyintézés és az ajánlatkérés telefonon gyors volt, a kolléga segítőkész. A kiszállítás a megbeszélt időpontban meg is történt, a gép pedig tiszta és kifogástalanul működött. Az egyetlen apró dolog, ami miatt nem adok maximális pontszámot, az a kezdeti kaució összege, ami elsőre kicsit magasnak tűnt. Ettől függetlenül, a szolgáltatás minősége vitathatatlan, az otthoni használat fájdalommentes és egyszerű volt. A gép tényleg sokat segített a rehabilitációban.",
+  "readmore": "Több olvasása",
+  "showless": "Kevesebb olvasása",
+  "faqTitle": "Gyakran ismételt kérdések (GYIK)"
 }

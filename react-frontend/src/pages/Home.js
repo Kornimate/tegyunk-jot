@@ -7,6 +7,8 @@ import { MobileTabs } from "../components/MobileTabs";
 import { ParallaxThumbnail } from "../components/ParallaxThumbnail";
 import { PricingList } from "../components/PricingList";
 import { Announcement } from "../components/Announcement";
+import FeedbackList from "../components/Feedback";
+import { FAQ } from "../components/FAQ";
 
 export function Home() {
   const { t } = useTranslation();
@@ -16,7 +18,8 @@ export function Home() {
     { id: "services", title: t("services") },
     { id: "pricing", title: t("pricing") },
     { id: "about", title: t("about") },
-    { id: "contact", title: t("contact") }
+    { id: "faq", title: t("faq") },
+    { id: "contact", title: t("contact") },
   ];
 
   const featureCards = [
@@ -67,9 +70,11 @@ export function Home() {
   });
 
   function goTo(id) {
+    const yOffset = -100;
     const el = sectionRefs.current[id];
     if (!el) return;
-    el.scrollIntoView({ behavior: "smooth", block: "start" });
+    const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+    window.scrollTo({ top: y, behavior: "smooth" });
   }
 
   return (
@@ -137,7 +142,7 @@ export function Home() {
         <section
           id="home"
           ref={(el) => (sectionRefs.current["home"] = el)}
-          className="min-h-[80vh] snap-start flex items-center"
+          className="min-h-[90vh] snap-start flex items-center"
         >
           <div className="max-w-6xl mx-auto px-6 flex flex-col lg:flex-row gap-12 items-center">
             {/* Left: text */}
@@ -190,9 +195,9 @@ export function Home() {
 
         {/* SERVICES */}
         <section
-          id="features"
+          id="services"
           ref={(el) => (sectionRefs.current["services"] = el)}
-          className="min-h-[70vh] py-24"
+          className="min-h-[50vh] pt-10"
         >
           <div className="max-w-6xl mx-auto px-6">
             <h2 className="text-3xl font-bold mb-6">{t("servicesTitle")}</h2>
@@ -221,50 +226,58 @@ export function Home() {
         <section
           id="pricing"
           ref={(el) => (sectionRefs.current["pricing"] = el)}
-          className="min-h-[70vh] py-24"
+          className="min-h-[70vh] py-10"
         >
           <div className="max-w-6xl mx-auto px-6">
             <h2 className="text-3xl font-bold mb-6">{t("pricingTitle")}</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 place-items-center">
               <PricingList />
             </div>
-            <Announcement type="info" message={t("infoAboutPrices")} extraStyle="mb-4 mt-10" />
-            <Announcement type="info" message={t("infoAboutFlexibility")} extraStyle="mt-4" />
-            <Announcement type="warning" message={t("infoAboutReliability")} extraStyle="mt-4" />
+            <Announcement
+              type="info"
+              message={t("infoAboutPrices")}
+              extraStyle="mb-4 mt-10"
+            />
+            <Announcement
+              type="info"
+              message={t("infoAboutFlexibility")}
+              extraStyle="mt-4"
+            />
+            <Announcement
+              type="warning"
+              message={t("infoAboutReliability")}
+              extraStyle="mt-4"
+            />
           </div>
         </section>
 
-        {/* GALLERY */}
+        {/* ABOUT US */}
         <section
-          id="gallery"
-          ref={(el) => (sectionRefs.current["gallery"] = el)}
-          className="min-h-[70vh] py-24 bg-gradient-to-b from-white to-gray-50"
+          id="about"
+          ref={(el) => (sectionRefs.current["about"] = el)}
+          className="min-h-[60vh] py-10"
         >
           <div className="max-w-6xl mx-auto px-6">
-            <h2 className="text-3xl font-bold mb-6">Gallery</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {galleryImages.map((img, idx) => (
-                <motion.div
-                  key={img}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.2 }}
-                  className="rounded-xl overflow-hidden shadow-md bg-white"
-                >
-                  <img
-                    src={img}
-                    alt={`gallery ${idx}`}
-                    className="w-full h-48 object-cover"
-                  />
-                  <div className="p-4">
-                    <div className="font-medium">Sample image #{idx + 1}</div>
-                    <div className="text-sm text-gray-500">
-                      A pleasant thumbnail with subtle depth.
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
+            <h2 className="text-3xl font-bold mb-6">{t("aboutTitle")}</h2>
+            <motion.div>{t("aboutDesc")}</motion.div>
+            <h2 className="text-2xl font-bold mt-10 mb-4">{t("processTitle")}</h2>
+            <motion.div
+              dangerouslySetInnerHTML={{ __html: t("processDesc") }}
+            ></motion.div>
+            <h2 className="text-2xl font-bold mt-10">{t("feedbackTitle")}</h2>
+            <FeedbackList />
+          </div>
+        </section>
+
+        {/* FAQ */}
+        <section
+          id="faq"
+          ref={(el) => (sectionRefs.current["faq"] = el)}
+          className="min-h-[70vh] py-24"
+        >
+          <div className="max-w-6xl mx-auto px-6">
+            <h2 className="text-3xl font-bold mb-6">{t("faqTitle")}</h2>
+            <FAQ />
           </div>
         </section>
 
@@ -272,7 +285,7 @@ export function Home() {
         <section
           id="contact"
           ref={(el) => (sectionRefs.current["contact"] = el)}
-          className="min-h-[50vh] py-24"
+          className="min-h-[50vh] py-10"
         >
           <div className="max-w-4xl mx-auto px-6">
             <h2 className="text-3xl font-bold mb-6">Get in touch</h2>
@@ -311,14 +324,3 @@ export function Home() {
     </div>
   );
 }
-
-/* ----------------- Helper components & data ----------------- */
-
-const galleryImages = [
-  "https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=abc",
-  "https://images.unsplash.com/photo-1496307042754-b4aa456c4a2d?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=abc",
-  "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=abc",
-  "https://images.unsplash.com/photo-1526318472351-c75fcf0700b9?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=abc",
-  "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=abc",
-  "https://images.unsplash.com/photo-1495462914368-5f40d6d0b9d6?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=abc",
-];

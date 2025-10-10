@@ -66,7 +66,7 @@ export function ParallaxThumbnail() {
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.08 }}
-        className="absolute -right-8 -top-6 w-20 h-20 rounded-2xl bg-gradient-to-br from-red-500 to-black shadow-lg flex items-center justify-center text-white font-bold"
+        className="absolute -right-6 -top-4 w-20 h-20 rounded-2xl bg-gradient-to-br from-red-500 to-black shadow-lg flex items-center justify-center text-white font-bold"
         style={{ transform: "translateZ(40px)" }}
       >
         +3
