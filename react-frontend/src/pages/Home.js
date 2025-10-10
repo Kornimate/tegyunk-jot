@@ -10,6 +10,7 @@ import { Announcement } from "../components/Announcement";
 import { FeedbackList } from "../components/FeedbackList";
 import { FAQ } from "../components/FAQ";
 import { Profile } from "../components/Profile";
+import { ContactForm } from "../components/ContactForm";
 
 export function Home() {
   const { t } = useTranslation();
@@ -301,48 +302,17 @@ export function Home() {
               ></motion.div>
             </div>
             <h3 className="text-3xl font-bold mb-6">{t("requestTitle")}</h3>
+            <Announcement
+              type="info"
+              message={
+                <>
+                  <span className="text-red-700">*</span> {t("compulsoryText")}
+                </>
+              }
+              extraStyle="mt-3 mb-8"
+            />
             <motion.div className="bg-white/80 backdrop-blur-md rounded-xl p-4 shadow-md border border-gray-100 w-full">
-              <motion.form
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 }}
-                className="grid grid-cols-1 md:grid-cols-2 gap-4"
-                onSubmit={(e) => e.preventDefault()}
-              >
-                <label className="text-md font-semibold text-gray-700">
-                  {t("nameLbl")}
-                </label>
-                <input
-                  className="col-span-1 md:col-span-2 rounded-lg border p-3"
-                  placeholder={t("nameLbl")}
-                />
-                <label className="text-md font-semibold text-gray-700">{t("emailLbl")}</label>
-                <input
-                  className="col-span-1 md:col-span-2 rounded-lg border p-3"
-                  placeholder={t("emailLbl")}
-                />
-                <label className="text-md font-semibold text-gray-700">{t("phoneLbl")}</label>
-                <input
-                  className="col-span-1 md:col-span-2 rounded-lg border p-3"
-                  placeholder={t("phoneLbl")}
-                />
-                <label className="text-md font-semibold text-gray-700">{t("startDateLbl")}</label>
-                <input
-                  type="date"
-                  className="col-span-1 md:col-span-2 rounded-lg border p-3"
-                  placeholder="Start Date"
-                />
-                <label className="text-md font-semibold text-gray-700">{t("messageLbl")}</label>
-                <textarea
-                  className="col-span-1 md:col-span-2 rounded-lg border p-3 h-32"
-                  placeholder={t("messagePlaceholder")}
-                />
-                <div className="col-span-1 md:col-span-2 justify-self-end">
-                  <button className="rounded-lg px-5 py-2 bg-gradient-to-r from-red-500 to-black text-white font-semibold shadow-md">
-                    {t("btnSendMessage")}
-                  </button>
-                </div>
-              </motion.form>
+              <ContactForm />
             </motion.div>
           </div>
         </section>

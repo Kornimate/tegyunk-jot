@@ -85,11 +85,18 @@
   "contactDesc": "Request a quote by phone or via the online form.",
   "contactDetails": "Email: info@pelda.hu<br />Phone: +36 70 123 4567",
   "requestTitle": "Send Request",
+  "compulsoryText": " marked fields are compulsory to fill out.",
   "nameLbl": "Name",
   "emailLbl": "Email",
   "phoneLbl": "Phone",
   "startDateLbl": "Expected start date",
   "messageLbl": "Message",
   "messagePlaceholder": "Write your message here...",
-  "btnSendMessage": "Send Request"
+  "btnSendMessage": "Send Request",
+  "nameRequired": "Email is required!",
+  "emailRequired": "Email is required!",
+  "emailInvalid": "Invalid email address!",
+  "phoneRequired": "Phone number is required!",
+  "phoneInvalid": "Invalid phone number!",
+  "messageRequired": "Message is required!"
 }

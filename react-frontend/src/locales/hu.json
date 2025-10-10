@@ -85,11 +85,18 @@
   "contactDesc": "Kérj ajánlatot telefonon vagy az online űrlapon keresztül.",
   "contactDetails": "Email: info@pelda.hu<br />Telefon: +36 70 123 4567",
   "requestTitle": "Ajánlatkérés",
+  "compulsoryText": "-al jelölt mezők megadása kötelező.",
   "nameLbl": "Név",
   "emailLbl": "Email",
   "phoneLbl": "Telefon",
   "startDateLbl": "Várható kezdő dátum",
   "messageLbl": "Üzenet",
   "messagePlaceholder": "Írja ide az üzenetet...",
-  "btnSendMessage": "Ajánlatkérés"
+  "btnSendMessage": "Ajánlatkérés",
+  "nameRequired": "Email megadása kötelező!",
+  "emailRequired": "Email megadása kötelező!",
+  "emailInvalid": "Érvénytelen email cím!",
+  "phoneRequired": "Telefonszám megadása kötelező!",
+  "phoneInvalid": "Érvénytelen telefonszám!",
+  "messageRequired": "Üzenet megadása kötelező!"
 }
