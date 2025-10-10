@@ -83,7 +83,7 @@ export function ContactForm() {
       className="grid grid-cols-1 md:grid-cols-2 gap-4"
     >
       {/* Name */}
-      <label className="text-md font-semibold text-gray-700 ps-1 place-content-center">
+      <label className="col-span-2 text-md font-semibold text-gray-700 ps-1 place-content-center">
         {t("nameLbl")}
         <span className="text-red-700"> *</span>
       </label>
@@ -91,7 +91,7 @@ export function ContactForm() {
         name="name"
         value={formData.name}
         onChange={handleChange}
-        className={`col-span-1 md:col-span-2 rounded-lg border p-3 ${
+        className={`col-span-2 md:col-span-2 rounded-lg border p-3 ${
           errors.name ? "border-red-500" : "border-gray-300"
         }`}
         placeholder={t("nameLbl")}
@@ -101,7 +101,7 @@ export function ContactForm() {
       )}
 
       {/* Email */}
-      <label className="text-md font-semibold text-gray-700 ps-1 place-content-center">
+      <label className="col-span-2 text-md font-semibold text-gray-700 ps-1 place-content-center">
         {t("emailLbl")}
         <span className="text-red-700"> *</span>
       </label>
@@ -110,7 +110,7 @@ export function ContactForm() {
         type="text"
         value={formData.email}
         onChange={handleChange}
-        className={`col-span-1 md:col-span-2 rounded-lg border p-3 ${
+        className={`col-span-2 md:col-span-2 rounded-lg border p-3 ${
           errors.email ? "border-red-500" : "border-gray-300"
         }`}
         placeholder={t("emailLbl")}
@@ -120,7 +120,7 @@ export function ContactForm() {
       )}
 
       {/* Phone */}
-      <label className="text-md font-semibold text-gray-700 ps-1 place-content-center">
+      <label className="col-span-2 text-md font-semibold text-gray-700 ps-1 place-content-center">
         {t("phoneLbl")}
         <span className="text-red-700"> *</span>
       </label>
@@ -128,7 +128,7 @@ export function ContactForm() {
         name="phone"
         value={formData.phone}
         onChange={handleChange}
-        className={`col-span-1 md:col-span-2 rounded-lg border p-3 ${
+        className={`col-span-2 md:col-span-2 rounded-lg border p-3 ${
           errors.phone ? "border-red-500" : "border-gray-300"
         }`}
         placeholder={t("phoneLbl")}
@@ -138,7 +138,7 @@ export function ContactForm() {
       )}
 
       {/* Start Date */}
-      <label className="text-md font-semibold text-gray-700 ps-1 place-content-center">
+      <label className="col-span-2 text-md font-semibold text-gray-700 ps-1 place-content-center">
         {t("startDateLbl")}
       </label>
       <input
@@ -146,11 +146,11 @@ export function ContactForm() {
         name="startDate"
         value={formData.startDate}
         onChange={handleChange}
-        className="col-span-1 md:col-span-2 rounded-lg border border-gray-300 p-3"
+        className="col-span-2 md:col-span-2 rounded-lg border border-gray-300 p-3"
       />
 
       {/* Message */}
-      <label className="text-md font-semibold text-gray-700 ps-1 place-content-center">
+      <label className="col-span-2 text-md font-semibold text-gray-700 ps-1 place-content-center">
         {t("messageLbl")}
         <span className="text-red-700"> *</span>
       </label>
@@ -158,7 +158,7 @@ export function ContactForm() {
         name="message"
         value={formData.message}
         onChange={handleChange}
-        className={`col-span-1 md:col-span-2 rounded-lg border p-3 h-32 ${
+        className={`col-span-2 md:col-span-2 rounded-lg border p-3 h-32 ${
           errors.message ? "border-red-500" : "border-gray-300"
         }`}
         placeholder={t("messagePlaceholder")}
@@ -168,7 +168,7 @@ export function ContactForm() {
       )}
 
       {/* Submit Button */}
-      <div className="col-span-1 md:col-span-2 flex justify-center">
+      <div className="col-span-2 md:col-span-2 flex justify-center">
         <button
           type="submit"
           className="rounded-lg px-5 py-2 bg-gradient-to-r from-red-500 to-black text-white font-semibold shadow-md hover:scale-105 transition-transform"

@@ -1,6 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "react-i18next";
+import CloseFullscreenIcon from '@mui/icons-material/CloseFullscreen';
+import ClearIcon from '@mui/icons-material/Clear';
+import OpenInFullIcon from '@mui/icons-material/OpenInFull';
 
 export function FAQ() {
   const { t } = useTranslation();
@@ -148,14 +151,14 @@ export function FAQ() {
                 className="px-3 py-2 text-sm rounded-md bg-gray-50 border border-gray-200 hover:bg-gray-100"
                 title="delete"
               >
-                {t("btnDelete")}
+                <ClearIcon />  {/* {t("btnDelete")} */}
               </button>
               <button
                 onClick={() => openAll()}
                 className="px-3 py-2 text-sm rounded-md bg-indigo-600 text-white hover:brightness-110"
                 title="openAll"
               >
-                {t("btnAll")}
+                <OpenInFullIcon /> {/* {t("btnAll")} */}
               </button>
             </div>
           </div>
@@ -274,13 +277,13 @@ export function FAQ() {
             onClick={openAll}
             className="px-3 py-1 rounded-md bg-gray-50 border"
           >
-            {t("openAll")}
+            <OpenInFullIcon /> {/* {t("openAll")} */}
           </button>
           <button
             onClick={closeAll}
             className="px-3 py-1 rounded-md bg-gray-50 border"
           >
-            {t("closeAll")}
+            <CloseFullscreenIcon /> {/* {t("closeAll")} */}
           </button>
         </div>
       </div>
