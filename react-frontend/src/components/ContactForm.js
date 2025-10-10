@@ -1,9 +1,20 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
+import { Announcement } from "./Announcement";
 
 export function ContactForm() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+
+  useEffect(() => {
+    function handleLanguageChange() {
+      setErrors(validate());
+    }
+
+    i18n.on("languageChanged", handleLanguageChange);
+
+    return () => i18n.off("languageChanged", handleLanguageChange);
+  });
 
   const [formData, setFormData] = useState({
     name: "",
@@ -157,7 +168,7 @@ export function ContactForm() {
       )}
 
       {/* Submit Button */}
-      <div className="col-span-1 md:col-span-2 flex justify-end">
+      <div className="col-span-1 md:col-span-2 flex justify-center">
         <button
           type="submit"
           className="rounded-lg px-5 py-2 bg-gradient-to-r from-red-500 to-black text-white font-semibold shadow-md hover:scale-105 transition-transform"
@@ -168,8 +179,8 @@ export function ContactForm() {
 
       {/* Success Message */}
       {success && (
-        <div className="col-span-2 text-green-600 font-medium text-center mt-2">
-          ✅ {t("formSuccess") || "Köszönjük! Üzenetét sikeresen elküldtük."}
+        <div className="col-span-2">
+           <Announcement type="info" message={`✅ ${t("formSuccess")}`} extraStyle="my-2" closable={true} />
         </div>
       )}
     </motion.form>

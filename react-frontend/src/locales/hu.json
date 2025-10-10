@@ -98,5 +98,6 @@
   "emailInvalid": "Érvénytelen email cím!",
   "phoneRequired": "Telefonszám megadása kötelező!",
   "phoneInvalid": "Érvénytelen telefonszám!",
-  "messageRequired": "Üzenet megadása kötelező!"
+  "messageRequired": "Üzenet megadása kötelező!",
+  "formSuccess": "Köszönjük! Üzenetét sikeresen elküldtük."
 }

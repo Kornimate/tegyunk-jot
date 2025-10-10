@@ -98,5 +98,6 @@
   "emailInvalid": "Invalid email address!",
   "phoneRequired": "Phone number is required!",
   "phoneInvalid": "Invalid phone number!",
-  "messageRequired": "Message is required!"
+  "messageRequired": "Message is required!",
+  "formSuccess": "Thank you! Your message has been sent successfully."
 }
