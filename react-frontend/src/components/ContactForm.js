@@ -8,7 +8,7 @@ export function ContactForm() {
 
   useEffect(() => {
     function handleLanguageChange() {
-      setErrors(validate());
+      setErrors({})
     }
 
     i18n.on("languageChanged", handleLanguageChange);
@@ -180,7 +180,12 @@ export function ContactForm() {
       {/* Success Message */}
       {success && (
         <div className="col-span-2">
-           <Announcement type="info" message={`✅ ${t("formSuccess")}`} extraStyle="my-2" closable={true} />
+          <Announcement
+            type="info"
+            message={`✅ ${t("formSuccess")}`}
+            extraStyle="my-2"
+            closable={true}
+          />
         </div>
       )}
     </motion.form>
