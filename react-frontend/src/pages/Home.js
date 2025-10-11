@@ -11,6 +11,7 @@ import { FeedbackList } from "../components/FeedbackList";
 import { FAQ } from "../components/FAQ";
 import { Profile } from "../components/Profile";
 import { ContactForm } from "../components/ContactForm";
+import { GeoLocationCounter } from "../components/GeoLocationCounter";
 
 export function Home() {
   const { t } = useTranslation();
@@ -104,6 +105,9 @@ export function Home() {
               <div className="text-xs text-gray-500">{t("companySlogen")}</div>
             </div>
           </div>
+
+          {/* Get Location of client*/}
+          <GeoLocationCounter />
 
           {/* Tabs / Menu */}
           <nav className="hidden md:flex items-center gap-6">

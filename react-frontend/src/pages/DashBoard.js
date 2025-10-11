@@ -16,9 +16,9 @@ import {
 } from "recharts";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import { useNavigate } from "react-router-dom";
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import "leaflet/dist/leaflet.css";
+import { useAuth } from "../hooks/AuthProvider";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 // ---------- Sample data ----------
 const bedsPieData = [
@@ -30,7 +30,7 @@ const cpmsPieData = [
   { name: "Active supply", value: 35 },
   { name: "Passive supply", value: 65 },
 ];
-const DONUT_COLORS = ["#EF4444", "#000"]; // cyan + gray
+const DONUT_COLORS = ["#EF4444", "#000"];
 
 // last 10 days page visits
 const visitsData = Array.from({ length: 10 }).map((_, i) => ({
@@ -53,9 +53,9 @@ const cpmsAreaData = Array.from({ length: 14 }).map((_, i) => ({
 
 // Map pins
 const mapPins = [
-  { id: 1, name: "Center Hospital A", coords: [55.6761, 12.5683] },
-  { id: 2, name: "Clinic B", coords: [55.68, 12.57] },
-  { id: 3, name: "Depot C", coords: [55.67, 12.56] },
+  { id: 1, name: "Center Hospital A", coords: [48.1118, 20.80101] },
+  { id: 2, name: "Clinic B", coords: [48.2, 20.5] },
+  { id: 3, name: "Depot C", coords: [48.0, 20.9] },
 ];
 
 // requests sample
@@ -87,6 +87,8 @@ export function DashBoard() {
   const [requests, setRequests] = useState(SAMPLE_REQUESTS);
   const [rents, setRents] = useState(SAMPLE_RENTS);
   const [logs] = useState(SAMPLE_LOGS);
+
+  const { logout } = useAuth();
 
   const navigate = useNavigate();
 
@@ -134,8 +136,7 @@ export function DashBoard() {
   }
 
   function SignOut() {
-    //Sign out procedure
-    navigate("/");
+    logout();
   }
 
   return (
@@ -309,7 +310,9 @@ export function DashBoard() {
 
           {/* Visits bar chart */}
           <div className="bg-white rounded-2xl shadow p-4 lg:col-span-2">
-            <h3 className="font-semibold mb-2">Weboldal látogatások (utolsó 10 nap)</h3>
+            <h3 className="font-semibold mb-2">
+              Weboldal látogatások (utolsó 10 nap)
+            </h3>
             <div className="h-48">
               <ResponsiveContainer>
                 <BarChart data={visitsData}>
@@ -328,8 +331,8 @@ export function DashBoard() {
             <h3 className="font-semibold mb-2">Térkép (látogatások)</h3>
             <div className="h-64 rounded-lg overflow-hidden">
               <MapContainer
-                center={[55.6761, 12.5683]}
-                zoom={12}
+                center={[48.11175, 20.80101]}
+                zoom={8}
                 style={{ height: "100%", width: "100%" }}
               >
                 <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />

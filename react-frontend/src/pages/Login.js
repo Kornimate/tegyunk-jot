@@ -1,12 +1,17 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import logo from "../resources/logo.jpg";
+import { useAuth } from "../hooks/AuthProvider";
+import axios from "axios";
 
 export function Login() {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({});
   const [errorMsg, setErrorMsg] = useState("");
+
+  const { login, checkIfTokenIsValid } = useAuth();
 
   const navigate = useNavigate();
 
@@ -16,26 +21,42 @@ export function Login() {
     setErrors((prev) => ({ ...prev, [name]: false }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // if (!formData.email) {
-    //   setErrorMsg("Tölts ki minden mezőt!");
-    //   setErrors((prev) => ({ ...prev, email: true }));
-    // }
+    if (!formData.email) {
+      setErrorMsg("Tölts ki minden mezőt!");
+      setErrors((prev) => ({ ...prev, email: true }));
+    }
 
-    // if (!formData.password) {
-    //   setErrorMsg("Tölts ki minden mezőt!");
-    //   setErrors((prev) => ({ ...prev, password: true }));
-    // }
+    if (!formData.password) {
+      setErrorMsg("Tölts ki minden mezőt!");
+      setErrors((prev) => ({ ...prev, password: true }));
+    }
 
-    // if (errors.email || errors.password) return;
+    if (errors.email || errors.password) return;
 
     setErrorMsg("");
-    navigate("/admin/dashboard")
+
+    try {
+      const response = await axios.post(
+        "http://localhost:5199/api/auth/login",
+        {
+          email: formData.email,
+          password: formData.password,
+        }
+      );
+
+      login(response.data.token, response.data.email);
+      navigate("/admin/dashboard");
+    } catch {
+      setErrorMsg("Sikertelen bejelentkezés!");
+    }
   };
 
-  return (
+  return checkIfTokenIsValid() ? (
+    <Navigate to="/admin/dashboard" replace />
+  ) : (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
