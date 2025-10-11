@@ -15,7 +15,6 @@ import {
   CartesianGrid,
 } from "recharts";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/AuthProvider";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
@@ -89,8 +88,6 @@ export function DashBoard() {
   const [logs] = useState(SAMPLE_LOGS);
 
   const { logout } = useAuth();
-
-  const navigate = useNavigate();
 
   // pagination for logs
   const LOGS_PER_PAGE = 10;
