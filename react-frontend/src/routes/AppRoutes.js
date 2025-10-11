@@ -2,7 +2,6 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Home } from "../pages/Home";
 import { Login } from "../pages/Login";
 import { DashBoard } from "../pages/DashBoard";
-import { Settings } from "../pages/Settings";
 import { ProtectedRoute } from "./ProtectedRoute";
 import { AdminLayout } from "../layouts/AdminLayout";
 import { VisitorLayout } from "../layouts/VisitorLayout";
@@ -15,7 +14,7 @@ export const AppRoutes = () => {
         <Route path="/" element={<VisitorLayout />}>
           <Route index element={<Home />} />
         </Route>
-        <Route path="/login" element={<Login />} />
+        <Route path="/auth/login" element={<Login />} />
         <Route
           path="/admin/"
           element={
@@ -25,7 +24,6 @@ export const AppRoutes = () => {
           }
         >
           <Route path="dashboard" element={<DashBoard />} />
-          <Route path="settings" element={<Settings />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>

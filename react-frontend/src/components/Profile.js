@@ -5,7 +5,7 @@ export const Profile = () => {
     const navigate = useNavigate();
 
     function NavigateToLogin(){
-        navigate("/login");
+        navigate("/auth/login");
     }
 
     return (

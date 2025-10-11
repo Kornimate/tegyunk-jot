@@ -1,12 +1,15 @@
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import reportWebVitals from './reportWebVitals';
-import { AppRoutes } from './routes/AppRoutes';
+import ReactDOM from "react-dom/client";
+import reportWebVitals from "./reportWebVitals";
+import { AppRoutes } from "./routes/AppRoutes";
+import { AuthProvider } from "./hooks/AuthProvider";
 import "./multilanguage/i18n";
+import "./index.css";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
+  <AuthProvider>
     <AppRoutes />
+  </AuthProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function
