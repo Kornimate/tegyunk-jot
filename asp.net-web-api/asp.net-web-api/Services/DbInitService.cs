@@ -56,6 +56,21 @@ namespace asp.net_web_api.Services
                     ]);
             }
 
+            if (!_context.Logs.Any())
+            {
+                _context.AddRange([
+                    new LogEntry{
+                        Text = "Test Log 1"
+                    },
+                    new LogEntry{
+                        Text = "Test Log 2"
+                    },
+                    new LogEntry{
+                        Text = "Test Log 3"
+                    }
+                    ]);
+            }
+
             _context.SaveChanges();
 
             return true;

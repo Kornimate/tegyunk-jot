@@ -76,7 +76,8 @@ const SAMPLE_LOGS = Array.from({ length: 53 }).map(
 export function DashBoard() {
   const [requests, setRequests] = useState(SAMPLE_REQUESTS);
   const [rents, setRents] = useState(SAMPLE_RENTS);
-  const [logs] = useState(SAMPLE_LOGS);
+  const [logs, setLogs] = useState(SAMPLE_LOGS);
+  const [visits, setVisits] = useState(visitsData);
   const { token, logout } = useAuth();
 
   const LOGS_PER_PAGE = 10;
@@ -104,11 +105,18 @@ export function DashBoard() {
     });
 
     async function apiCalls(){
-      const response = await api.get("/api/requests");
-      console.log(response.data)
+      const responseRequests = await api.get("/api/requests");
+      
+      setRequests(responseRequests.data.filter(x => !x.isActiveRequest))
+      setRents(responseRequests.data.filter(x => x.isActiveRequest))
+      
+      const responseVisits = await api.get("/api/webvisit");
+      console.log(responseVisits.data)
+      // setVisits(responseVisits.data)
 
-      setRequests(response.data.filter(x => !x.isActiveRequest))
-      setRents(response.data.filter(x => x.isActiveRequest))
+      const responseLogs = await api.get("/api/logs");
+      console.log(responseLogs.data)
+      // setLogs(responseLogs.data)
     }
 
     apiCalls();
@@ -374,9 +382,9 @@ export function DashBoard() {
             ) : (
               <div className="h-48">
                 <ResponsiveContainer>
-                  <BarChart data={visitsData}>
+                  <BarChart data={visits}>
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="day" />
+                    <XAxis dataKey="date" />
                     <YAxis />
                     <Tooltip />
                     <Bar dataKey="visits" fill="#9CA3AF" />

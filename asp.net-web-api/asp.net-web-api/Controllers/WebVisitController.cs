@@ -10,28 +10,8 @@ namespace asp.net_web_api.Controllers
     [Route("api/webvisit")]
     public class WebVisitController : ControllerBase
     {
-        private readonly AppDbContext _context;
-
-        public WebVisitController(AppDbContext context)
-        {
-            _context = context;
-        }
-
-        [AllowAnonymous]
-        [HttpPost("new")]
-        public async Task<IActionResult> PostNewVisit([FromBody] WebVisitDto dto)
-        {
-            await _context.AddAsync(new WebVisit
-            {
-                LongitudeCoord = dto.LongitudeCoord,
-                LatitudeCoord = dto.LatitudeCoord,
-            });
-
-            return Ok();
-        }
-
         [Authorize]
-        [HttpGet("analytics")]
+        [HttpGet]
         public async Task<IActionResult> GetAnalytics()
         {
             var today = DateTime.UtcNow.Date;
@@ -67,5 +47,24 @@ namespace asp.net_web_api.Controllers
             return Ok(result);
         }
 
+        private readonly AppDbContext _context;
+
+        public WebVisitController(AppDbContext context)
+        {
+            _context = context;
+        }
+
+        [AllowAnonymous]
+        [HttpPost("new")]
+        public async Task<IActionResult> PostNewVisit([FromBody] WebVisitDto dto)
+        {
+            await _context.AddAsync(new WebVisit
+            {
+                LongitudeCoord = dto.LongitudeCoord,
+                LatitudeCoord = dto.LatitudeCoord,
+            });
+
+            return Ok();
+        }
     }
 }
