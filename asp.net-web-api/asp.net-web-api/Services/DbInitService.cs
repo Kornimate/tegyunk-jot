@@ -31,6 +31,33 @@ namespace asp.net_web_api.Services
                 var res = _userManager.CreateAsync(new AppUser { Email = "test@tj.com", UserName = "test" }, "Password.1234").GetAwaiter().GetResult();
             }
 
+            if (!_context.Requests.Any())
+            {
+                _context.AddRange([
+                    new Request{
+                        Name = "TestName 1",
+                        Email = "TestMail 1",
+                        PhoneNumber = "1234567890",
+                        Message = "TestMessage 1"
+                    },
+                    new Request{
+                        Name = "TestName 2",
+                        Email = "TestMail 2",
+                        PhoneNumber = "1234567890",
+                        Message = "TestMessage 2"
+                    },
+                    new Request{
+                        Name = "TestName 3",
+                        Email = "TestMail 3",
+                        PhoneNumber = "1234567890",
+                        Message = "TestMessage 3",
+                        IsActiveRequest = true
+                    }
+                    ]);
+            }
+
+            _context.SaveChanges();
+
             return true;
         }
     }

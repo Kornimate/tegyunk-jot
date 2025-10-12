@@ -20,9 +20,7 @@ namespace asp.net_web_api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetResources()
         {
-            var settings = await _context.Resources.ToListAsync();
-
-            return Ok(settings);
+            return Ok(await _context.Resources.ToListAsync());
         }
 
         [HttpPut("edit")]

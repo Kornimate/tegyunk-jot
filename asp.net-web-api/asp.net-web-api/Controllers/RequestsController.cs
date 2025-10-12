@@ -1,6 +1,8 @@
 ﻿using asp.net_web_api.DTOs;
+using asp.net_web_api.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace asp.net_web_api.Controllers
 {
@@ -9,10 +11,17 @@ namespace asp.net_web_api.Controllers
     [Route("api/requests")]
     public class RequestsController : ControllerBase
     {
+        private AppDbContext _context;
+
+        public RequestsController(AppDbContext context)
+        {
+            _context = context;
+        }
+
         [HttpGet]
         public async Task<IActionResult> GetRequests()
         {
-            return await Task.FromResult(Ok());
+            return Ok(await _context.Requests.ToListAsync());
         }
 
         [HttpPut("edit")]
