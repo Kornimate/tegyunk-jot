@@ -23,6 +23,18 @@ namespace asp.net_web_api.Controllers
             return Ok(await _context.Resources.ToListAsync());
         }
 
+        [HttpGet("machines")]
+        public async Task<IActionResult> GetMachines()
+        {
+            return await Task.FromResult(Ok(Enum.GetValues<MachineTypes>()
+                            .ToArray()
+                            .Select(x => new MachineDto
+                            {
+                                Name = x.GetMachineName(),
+                                Id = (int)x
+                            })));
+        }
+
         [HttpPut("edit")]
         public async Task<IActionResult> PutNewResourceValue([FromBody] ResourcesDto dto)
         {

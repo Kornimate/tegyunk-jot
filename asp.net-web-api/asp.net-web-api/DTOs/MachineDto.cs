@@ -1,8 +1,8 @@
 ﻿namespace asp.net_web_api.DTOs
 {
-    public record RequestDto
+    public class MachineDto
     {
+        public string Name { get; set; } = string.Empty;
         public int Id { get; set; }
-        public bool IsActive { get; set; }
     }
 }

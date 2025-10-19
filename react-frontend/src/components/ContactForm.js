@@ -2,13 +2,16 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { Announcement } from "./Announcement";
+import { useAuth } from "../hooks/AuthProvider";
+import axios from "axios";
 
 export function ContactForm() {
   const { t, i18n } = useTranslation();
+  const { token } = useAuth();
 
   useEffect(() => {
     function handleLanguageChange() {
-      setErrors({})
+      setErrors({});
     }
 
     i18n.on("languageChanged", handleLanguageChange);
@@ -62,17 +65,41 @@ export function ContactForm() {
       setErrors(validationErrors);
       setSuccess(false);
     } else {
-      setSuccess(true);
-      setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        startDate: "",
-        message: "",
-      });
-      setErrors({});
+      sendRequest();
     }
   };
+
+  async function sendRequest() {
+    await axios.post(
+      `${process.env.REACT_APP_BASE_URL}/api/requests/new`,
+      {
+        name: formData.name,
+        email: formData.email,
+        phoneNumber: formData.phone,
+        possibleStartDate: formData.startDate,
+        message: formData.message,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token()}`,
+        },
+      }
+    );
+
+    setStateToNormal();
+  }
+
+  function setStateToNormal() {
+    setSuccess(true);
+    setFormData({
+      name: "",
+      email: "",
+      phone: "",
+      startDate: "",
+      message: "",
+    });
+    setErrors({});
+  }
 
   return (
     <motion.form

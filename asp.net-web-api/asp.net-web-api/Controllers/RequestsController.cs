@@ -22,13 +22,13 @@ namespace asp.net_web_api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetRequests()
         {
-            return Ok(await _context.Requests.
-                                Where(x => !x.IsDeleted)
+            return Ok(await _context.Requests
+                                .Where(x => !x.IsDeleted)
                                 .ToListAsync());
         }
 
         [HttpPut("edit")]
-        public async Task<IActionResult> PutRequestActivityChange([FromBody] RequestDto dto)
+        public async Task<IActionResult> PutRequestActivityChange([FromBody] RequestModificationDto dto)
         {
             var request = await _context.Requests.FirstOrDefaultAsync(x => x.Id == dto.Id);
 
@@ -36,6 +36,7 @@ namespace asp.net_web_api.Controllers
                 return BadRequest();
 
             request.IsActiveRequest = dto.IsActive;
+            request.Machine = (MachineTypes)dto.Machine;
 
             await _context.Logs.AddAsync(new LogEntry
             {
@@ -49,6 +50,32 @@ namespace asp.net_web_api.Controllers
             return Ok();
         }
 
+        [AllowAnonymous]
+        [HttpPost("new")]
+        public async Task<IActionResult> PostNewRequest([FromBody] RequestCreateDto dto)
+        {
+            await _context.AddAsync(new Request
+            {
+                Name = dto.Name,
+                Email = dto.Email,
+                PhoneNumber = dto.PhoneNumber,
+                PossibleStartDate = dto.PossibleStartDate,
+                Message = dto.Message,
+            });
+
+            await _context.Logs.AddAsync(new LogEntry
+            {
+                RecordedTime = DateTime.UtcNow,
+                Text = $"Új ajánlatkérést rögzített a rendszer"
+            });
+
+            await _context.SaveChangesAsync();
+
+            //email service to notify 
+
+            return Created();
+        }
+
         [HttpDelete("delete/{id}")]
         public async Task<IActionResult> DeleteRequest([FromRoute] int id)
         {
@@ -57,7 +84,10 @@ namespace asp.net_web_api.Controllers
             if (request is null)
                 return BadRequest();
 
-            _context.Requests.Remove(request);
+            request.IsDeleted = true;
+            request.IsActiveRequest = false;
+            request.ActivatedDate = null;
+            request.FinishedDate = null;
 
             await _context.Logs.AddAsync(new LogEntry
             {

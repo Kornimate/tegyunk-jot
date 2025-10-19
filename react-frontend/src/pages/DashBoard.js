@@ -20,7 +20,9 @@ import { useAuth } from "../hooks/AuthProvider";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import axios from "axios";
-import { ConfirmDialog } from "../components/ConfirmDialog";
+import { ConfirmDeleteDialog } from "../components/ConfirmDeleteDialog";
+import { ConfirmRequestStartDialog } from "../components/ConfirmRequestStartDialog";
+import "../styles/leaflet-overrides.css";
 
 // ---------- Sample data ----------
 const bedsPieData = [
@@ -34,7 +36,7 @@ const cpmsPieData = [
 const DONUT_COLORS = ["#EF4444", "#000"];
 
 const visitsData = Array.from({ length: 10 }).map((_, i) => ({
-  day: `Day ${i + 1}`,
+  date: `Day ${i + 1}`,
   visits: Math.floor(200 + Math.random() * 800),
 }));
 
@@ -80,10 +82,14 @@ export function DashBoard() {
   const [logs, setLogs] = useState(SAMPLE_LOGS);
   const [visits, setVisits] = useState(visitsData);
   const [pins, setPins] = useState(mapPins);
+  const [machines, setMachines] = useState([]);
   const { token, logout } = useAuth();
 
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [idToDelete, setIdToDelete] = useState(null);
+
+  const [isActivateDialogOpen, setIsActivateDialogOpen] = useState(false);
+  const [idToActivate, setIdToActivate] = useState(null);
 
   const LOGS_PER_PAGE = 10;
   const [logPage, setLogPage] = useState(0);
@@ -114,13 +120,36 @@ export function DashBoard() {
 
   const refreshRequests = useCallback(async () => {
     const responseRequests = await api.get("/api/requests");
-    setRequests(responseRequests.data.filter((x) => !x.isActiveRequest));
-    setRents(responseRequests.data.filter((x) => x.isActiveRequest));
+    setRequests(
+      responseRequests.data
+        .filter((x) => !x.isActiveRequest)
+        .map((x) => ({
+          ...x,
+          possibleStartDate: x.possibleStartDate
+            ? new Date(x.possibleStartDate)
+            : null,
+        }))
+    );
+    setRents(
+      responseRequests.data
+        .filter((x) => x.isActiveRequest)
+        .map((x) => ({
+          ...x,
+          possibleStartDate: x.possibleStartDate
+            ? new Date(x.possibleStartDate)
+            : null,
+        }))
+    );
   }, [api]);
 
   const refreshVisits = useCallback(async () => {
     const responseVisits = await api.get("/api/webvisit");
-    setVisits(responseVisits.data);
+    setVisits(
+      responseVisits.data.map((x) => {
+        const date = new Date(x.date);
+        return { ...x, date: date.getMonth() + ". " + date.getDate() + "." };
+      })
+    );
 
     const responsePins = await api.get("/api/webvisit/coordinates");
     setPins(
@@ -130,7 +159,17 @@ export function DashBoard() {
 
   const refreshLogs = useCallback(async () => {
     const responseLogs = await api.get("/api/logs");
-    setLogs(responseLogs.data);
+    setLogs(
+      responseLogs.data.map((x) => ({
+        ...x,
+        recordedTime: new Date(x.recordedTime + "Z"),
+      }))
+    );
+  }, [api]);
+
+  const refreshMachines = useCallback(async () => {
+    const responseMachines = await api.get("/api/resources/machines");
+    setMachines(responseMachines.data);
   }, [api]);
 
   useEffect(() => {
@@ -142,6 +181,7 @@ export function DashBoard() {
       await refreshRequests();
       await refreshVisits();
       await refreshLogs();
+      await refreshMachines();
     }
 
     apiCalls();
@@ -149,14 +189,15 @@ export function DashBoard() {
     setLoadingRequests(false);
     setLoadingLogs(false);
     setLoadingVisits(false);
-  }, [refreshRequests, refreshVisits, refreshLogs]);
+  }, [refreshRequests, refreshVisits, refreshLogs, refreshMachines]);
 
-  async function setRequestActive(id) {
+  async function setRequestActive(id, machineId) {
     setLoadingRequests(true);
 
     await api.put("/api/requests/edit", {
       id: id,
       isActive: true,
+      machine: machineId,
     });
 
     refreshRequests();
@@ -199,9 +240,14 @@ export function DashBoard() {
     setLoadingRequests(false);
   }
 
-  async function openConfirmDialog(id) {
+  async function openConfirmDeleteDialog(id) {
     setIdToDelete(id);
-    setIsDialogOpen(true);
+    setIsDeleteDialogOpen(true);
+  }
+
+  async function openConfirmActivateDialog(id) {
+    setIdToActivate(id);
+    setIsActivateDialogOpen(true);
   }
 
   function SignOut() {
@@ -433,7 +479,7 @@ export function DashBoard() {
             {loadingVisits ? (
               <Loader />
             ) : (
-              <div className="h-48">
+              <div className="h-64 items-center">
                 <ResponsiveContainer>
                   <BarChart data={visits}>
                     <CartesianGrid strokeDasharray="3 3" />
@@ -448,12 +494,12 @@ export function DashBoard() {
           </div>
 
           {/* Map */}
-          <div className="bg-white rounded-2xl shadow p-4">
+          <div className="relative z-20 bg-white rounded-2xl shadow p-4">
             <h3 className="font-semibold mb-2">Weboldal látogatások térkép</h3>
             {loadingVisits ? (
               <Loader />
             ) : (
-              <div className="h-64 rounded-lg overflow-hidden">
+              <div className="h-64 rounded-lg overflow-hidden z-10">
                 <MapContainer
                   center={[48.11175, 20.80101]}
                   zoom={8}
@@ -493,14 +539,17 @@ export function DashBoard() {
                           <div className="font-semibold">
                             {r.name}{" "}
                             <span className="text-xs text-gray-400">
-                              (#{r.id})
+                              (#{r?.id})
                             </span>
                           </div>
                           <div className="text-sm text-gray-600">
-                            {r.email} • {r.phone}
+                            {r.email} • {r?.phoneNumber}
                           </div>
                           <div className="text-sm text-gray-600">
-                            Start: {r.possibleStartDate}
+                            Start:{" "}
+                            {r?.possibleStartDate
+                              ? r?.possibleStartDate?.toLocaleString()
+                              : "-"}
                           </div>
                           <div className="mt-2 text-sm text-gray-700">
                             {r.message}
@@ -508,13 +557,13 @@ export function DashBoard() {
                         </div>
                         <div className="flex flex-col gap-2 shrink-0">
                           <button
-                            onClick={() => setRequestActive(r.id)}
+                            onClick={() => openConfirmActivateDialog(r.id)}
                             className="px-3 py-2 bg-gray-500 text-white rounded-md"
                           >
                             Aktiválás
                           </button>
                           <button
-                            onClick={() => openConfirmDialog(r.id)}
+                            onClick={() => openConfirmDeleteDialog(r.id)}
                             className="px-3 py-2 bg-red-500 text-white rounded-md"
                           >
                             Törlés
@@ -555,10 +604,13 @@ export function DashBoard() {
                           </span>
                         </div>
                         <div className="text-sm text-gray-600">
-                          {r.email} • {r.phone}
+                          {r.email} • {r?.phoneNumber}
                         </div>
                         <div className="text-sm text-gray-600">
-                          Start: {r.startDate}
+                          Start:{" "}
+                          {r?.possibleStartDate
+                            ? r?.possibleStartDate?.toLocaleString()
+                            : "-"}
                         </div>
                       </div>
                       <div className="flex flex-col gap-2">
@@ -569,7 +621,7 @@ export function DashBoard() {
                           Leállítás
                         </button>
                         <button
-                          onClick={() => openConfirmDialog(r.id)}
+                          onClick={() => openConfirmDeleteDialog(r.id)}
                           className="px-3 py-2 bg-red-500 text-white rounded-md"
                         >
                           Törlés
@@ -599,9 +651,12 @@ export function DashBoard() {
                       currentLogs.map((log, idx) => (
                         <li
                           key={`log_${idx}`}
-                          className={`text-sm text-gray-700 border-b pb-2 ${log.important ? "font-bold" : ""}`}
+                          className={`text-sm text-gray-700 border-b pb-2 ${
+                            log.important ? "font-bold" : ""
+                          }`}
                         >
-                          {log.text}, ekkor: {new Date(log.recordedTime).toLocaleString()}
+                          {log.text}, ekkor:{" "}
+                          {log?.recordedTime?.toLocaleString()}
                         </li>
                       ))
                     ) : (
@@ -635,11 +690,18 @@ export function DashBoard() {
             )}
           </div>
         </section>
-        <ConfirmDialog
-          isOpen={isDialogOpen}
-          setIsOpen={setIsDialogOpen}
+        <ConfirmDeleteDialog
+          isOpen={isDeleteDialogOpen}
+          setIsOpen={setIsDeleteDialogOpen}
           id={idToDelete}
           callback={deleteElement}
+        />
+        <ConfirmRequestStartDialog
+          isOpen={isActivateDialogOpen}
+          setIsOpen={setIsActivateDialogOpen}
+          id={idToActivate}
+          callback={setRequestActive}
+          dropDownElements={machines}
         />
       </div>
     </div>

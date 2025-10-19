@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel;
+using System.Security.Claims;
 
 namespace asp.net_web_api.Controllers
 {
@@ -26,14 +27,12 @@ namespace asp.net_web_api.Controllers
 
         [AllowAnonymous]
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginDTO loginData)
+        public async Task<IActionResult> Login([FromBody] LoginDto loginData)
         {
             if (string.IsNullOrWhiteSpace(loginData.Email) || string.IsNullOrWhiteSpace(loginData.Password))
                 return BadRequest();
 
             var user = await _userManager.FindByEmailAsync(loginData.Email!);
-
-            var users = await _context.Users.ToListAsync();
 
             if (user is null)
                 return Unauthorized();
@@ -41,9 +40,21 @@ namespace asp.net_web_api.Controllers
             var loginAttemptIsSuccessful = await _userManager.CheckPasswordAsync(user, loginData.Password);
 
             if (loginAttemptIsSuccessful == true)
+            {
+                await _context.Logs.AddAsync(new LogEntry
+                {
+                    RecordedTime = DateTime.UtcNow,
+                    Text = $"{user.UserName} bejelentkezett"
+                });
+
+                await _context.SaveChangesAsync();
+
                 return Ok(new { Token = _jwtService.GenerateJwtToken(user), user.Email });
+            }
             else
+            {
                 return Unauthorized();
+            }
         }
     }
 }

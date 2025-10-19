@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from 'framer-motion';
 
-export function ConfirmDialog( {isOpen, setIsOpen, id, callback} ) {
+export function ConfirmDeleteDialog( {isOpen, setIsOpen, id, callback} ) {
   const closeDialog = () => setIsOpen(false);
   const confirmDelete = async () => {
     await callback(id);
@@ -14,13 +14,13 @@ export function ConfirmDialog( {isOpen, setIsOpen, id, callback} ) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
+            className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-[9999]"
           >
             <motion.div
               initial={{ scale: 0.8 }}
               animate={{ scale: 1 }}
               exit={{ scale: 0.8 }}
-              className="bg-white p-6 rounded-2xl shadow-xl text-center"
+              className="bg-white p-6 rounded-2xl shadow-xl text-center z-[10000]"
             >
               <h2 className="text-xl mb-4">Biztosan ki akarja törölni az elemet? (#{id})</h2>
               <div className="flex gap-4 justify-center">
