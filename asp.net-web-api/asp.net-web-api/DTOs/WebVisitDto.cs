@@ -2,7 +2,8 @@
 {
     public record WebVisitDto
     {
-        public double LongitudeCoord { get; set; }
-        public double LatitudeCoord { get; set; }
+        public string Id { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
+        public double[] Coords { get; set; } = [];
     }
 }

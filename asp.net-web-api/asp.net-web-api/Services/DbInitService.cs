@@ -19,7 +19,7 @@ namespace asp.net_web_api.Services
 
         public void Dispose()
         {
-            _context.Dispose(); 
+            _context.Dispose();
         }
 
         public bool Initialize()
@@ -60,14 +60,35 @@ namespace asp.net_web_api.Services
             {
                 _context.AddRange([
                     new LogEntry{
-                        Text = "Test Log 1"
+                        Text = "Test Log 1",
+                        RecordedTime = DateTime.UtcNow.Date,
                     },
                     new LogEntry{
-                        Text = "Test Log 2"
+                        Text = "Test Log 2",
+                        RecordedTime = DateTime.UtcNow.Date,
                     },
                     new LogEntry{
-                        Text = "Test Log 3"
+                        Text = "Test Log 3",
+                        RecordedTime = DateTime.UtcNow.Date,
                     }
+                    ]);
+            }
+
+            if (!_context.WebVisits.Any())
+            {
+                _context.AddRange([
+                    new WebVisit {
+                        LatitudeCoord = 48.1118,
+                        LongitudeCoord = 20.80101
+                    },
+                    new WebVisit {
+                        LatitudeCoord = 48.0,
+                        LongitudeCoord = 20.0
+                    },
+                    new WebVisit {
+                        LatitudeCoord = 48.4,
+                        LongitudeCoord = 20.5
+                    },
                     ]);
             }
 

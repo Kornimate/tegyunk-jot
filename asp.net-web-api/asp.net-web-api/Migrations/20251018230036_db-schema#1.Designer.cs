@@ -11,7 +11,7 @@ using asp.net_web_api.Models;
 namespace asp.net_web_api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251012002700_db-schema-#1")]
+    [Migration("20251018230036_db-schema#1")]
     partial class dbschema1
     {
         /// <inheritdoc />
@@ -156,6 +156,12 @@ namespace asp.net_web_api.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("Important")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("RecordedTime")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Text")

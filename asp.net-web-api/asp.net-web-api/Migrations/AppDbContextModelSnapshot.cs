@@ -155,6 +155,12 @@ namespace asp.net_web_api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
+                    b.Property<bool>("Important")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("RecordedTime")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Text")
                         .IsRequired()
                         .HasColumnType("TEXT");

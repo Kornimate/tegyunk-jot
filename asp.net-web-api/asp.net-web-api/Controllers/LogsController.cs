@@ -21,7 +21,10 @@ namespace asp.net_web_api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetLogs()
         {
-            return Ok(await _context.Logs.ToListAsync());
+            return Ok(await _context.Logs
+                                .Where(x => x.RecordedTime >= DateTime.UtcNow.Date.AddDays(-13))
+                                .OrderByDescending(x => x.RecordedTime)
+                                .ToListAsync());
         }
     }
 }

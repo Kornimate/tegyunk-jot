@@ -40,7 +40,7 @@ export function Login() {
 
     try {
       const response = await axios.post(
-        "http://localhost:5199/api/auth/login",
+      `${process.env.REACT_APP_BASE_URL}/api/auth/login`,
         {
           email: formData.email,
           password: formData.password,

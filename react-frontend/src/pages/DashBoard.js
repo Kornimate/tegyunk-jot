@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import {
   PieChart,
@@ -20,6 +20,7 @@ import { useAuth } from "../hooks/AuthProvider";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import axios from "axios";
+import { ConfirmDialog } from "../components/ConfirmDialog";
 
 // ---------- Sample data ----------
 const bedsPieData = [
@@ -78,7 +79,11 @@ export function DashBoard() {
   const [rents, setRents] = useState(SAMPLE_RENTS);
   const [logs, setLogs] = useState(SAMPLE_LOGS);
   const [visits, setVisits] = useState(visitsData);
+  const [pins, setPins] = useState(mapPins);
   const { token, logout } = useAuth();
+
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [idToDelete, setIdToDelete] = useState(null);
 
   const LOGS_PER_PAGE = 10;
   const [logPage, setLogPage] = useState(0);
@@ -92,65 +97,113 @@ export function DashBoard() {
     [logs, logPage]
   );
 
-  const [loading, setLoading] = useState(true);
+  const api = useMemo(
+    () =>
+      axios.create({
+        baseURL: process.env.REACT_APP_BASE_URL,
+        headers: {
+          Authorization: `Bearer ${token()}`,
+        },
+      }),
+    [token]
+  );
+
+  const [loadingRequests, setLoadingRequests] = useState(true);
+  const [loadingLogs, setLoadingLogs] = useState(true);
+  const [loadingVisits, setLoadingVisits] = useState(true);
+
+  const refreshRequests = useCallback(async () => {
+    const responseRequests = await api.get("/api/requests");
+    setRequests(responseRequests.data.filter((x) => !x.isActiveRequest));
+    setRents(responseRequests.data.filter((x) => x.isActiveRequest));
+  }, [api]);
+
+  const refreshVisits = useCallback(async () => {
+    const responseVisits = await api.get("/api/webvisit");
+    setVisits(responseVisits.data);
+
+    const responsePins = await api.get("/api/webvisit/coordinates");
+    setPins(
+      responsePins.data.map((x, i) => ({ ...x, name: x.name + " " + i }))
+    );
+  }, [api]);
+
+  const refreshLogs = useCallback(async () => {
+    const responseLogs = await api.get("/api/logs");
+    setLogs(responseLogs.data);
+  }, [api]);
 
   useEffect(() => {
-    setLoading(true);
+    setLoadingRequests(true);
+    setLoadingLogs(true);
+    setLoadingVisits(true);
 
-    const api = axios.create({
-      baseURL: "http://localhost:5199",
-      headers: {
-        Authorization: `Bearer ${token()}`,
-      },
-    });
-
-    async function apiCalls(){
-      const responseRequests = await api.get("/api/requests");
-      
-      setRequests(responseRequests.data.filter(x => !x.isActiveRequest))
-      setRents(responseRequests.data.filter(x => x.isActiveRequest))
-      
-      const responseVisits = await api.get("/api/webvisit");
-      console.log(responseVisits.data)
-      // setVisits(responseVisits.data)
-
-      const responseLogs = await api.get("/api/logs");
-      console.log(responseLogs.data)
-      // setLogs(responseLogs.data)
+    async function apiCalls() {
+      await refreshRequests();
+      await refreshVisits();
+      await refreshLogs();
     }
 
     apiCalls();
 
-    setLoading(false);
-  }, [token]);
+    setLoadingRequests(false);
+    setLoadingLogs(false);
+    setLoadingVisits(false);
+  }, [refreshRequests, refreshVisits, refreshLogs]);
 
-  // ---------- Handlers ----------
-  function startRequest(id) {
-    const req = requests.find((r) => r.id === id);
-    if (!req) return;
-    const newRent = {
-      id: `RENT-${Date.now()}`,
-      name: req.name,
-      email: req.email,
-      phone: req.phone,
-      startDate: req.startDate,
-    };
-    setRents((prev) => [newRent, ...prev]);
-    setRequests((prev) => prev.filter((r) => r.id !== id));
+  async function setRequestActive(id) {
+    setLoadingRequests(true);
+
+    await api.put("/api/requests/edit", {
+      id: id,
+      isActive: true,
+    });
+
+    refreshRequests();
+
+    setLoadingLogs(true);
+    refreshLogs();
+    setLoadingLogs(false);
+
+    setLoadingRequests(false);
   }
 
-  function deleteRequest(id) {
-    setRequests((prev) => prev.filter((r) => r.id !== id));
+  async function setRentNotActivity(id) {
+    setLoadingRequests(true);
+
+    await api.put("/api/requests/edit", {
+      id: id,
+      isActive: false,
+    });
+
+    refreshRequests();
+
+    setLoadingLogs(true);
+    refreshLogs();
+    setLoadingLogs(false);
+
+    setLoadingRequests(false);
   }
-  
-  function stopRent(id) {
-    setRents((prev) => prev.filter((r) => r.id !== id));
+
+  async function deleteElement(id) {
+    setLoadingRequests(true);
+
+    await api.delete(`/api/requests/delete/${id}`);
+
+    refreshRequests();
+
+    setLoadingLogs(true);
+    refreshLogs();
+    setLoadingLogs(false);
+
+    setLoadingRequests(false);
   }
-  
-  function deleteRent(id) {
-    setRents((prev) => prev.filter((r) => r.id !== id));
+
+  async function openConfirmDialog(id) {
+    setIdToDelete(id);
+    setIsDialogOpen(true);
   }
-  
+
   function SignOut() {
     logout();
   }
@@ -189,7 +242,7 @@ export function DashBoard() {
             <h3 className="font-semibold mb-2">
               Kórházi ágyak (Kiadott vs Raktárban)
             </h3>
-            {loading ? (
+            {loadingRequests ? (
               <Loader />
             ) : (
               <>
@@ -231,7 +284,7 @@ export function DashBoard() {
             <h3 className="font-semibold mb-2">
               Kiadott kórházi ágyak (utolsó 14 nap)
             </h3>
-            {loading ? (
+            {loadingRequests ? (
               <Loader />
             ) : (
               <>
@@ -283,7 +336,7 @@ export function DashBoard() {
             <h3 className="font-semibold mb-2">
               CPM gépek (Kiadott vs Raktárban)
             </h3>
-            {loading ? (
+            {loadingRequests ? (
               <Loader />
             ) : (
               <>
@@ -325,7 +378,7 @@ export function DashBoard() {
             <h3 className="font-semibold mb-2">
               Kiadott CPM gépek (utolsó 14 nap)
             </h3>
-            {loading ? (
+            {loadingRequests ? (
               <Loader />
             ) : (
               <>
@@ -377,7 +430,7 @@ export function DashBoard() {
             <h3 className="font-semibold mb-2">
               Weboldal látogatások (utolsó 10 nap)
             </h3>
-            {loading ? (
+            {loadingVisits ? (
               <Loader />
             ) : (
               <div className="h-48">
@@ -397,7 +450,7 @@ export function DashBoard() {
           {/* Map */}
           <div className="bg-white rounded-2xl shadow p-4">
             <h3 className="font-semibold mb-2">Weboldal látogatások térkép</h3>
-            {loading ? (
+            {loadingVisits ? (
               <Loader />
             ) : (
               <div className="h-64 rounded-lg overflow-hidden">
@@ -407,7 +460,7 @@ export function DashBoard() {
                   style={{ height: "100%", width: "100%" }}
                 >
                   <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-                  {mapPins.map((p) => (
+                  {pins.map((p) => (
                     <Marker key={p.id} position={p.coords}>
                       <Popup>{p.name}</Popup>
                     </Marker>
@@ -423,18 +476,77 @@ export function DashBoard() {
           {/* Requests */}
           <div className="bg-white rounded-2xl shadow p-4 lg:col-span-2 flex flex-col h-screen">
             <h3 className="font-semibold mb-3">Ajánlatkérések</h3>
-            {loading ? (
+            {loadingRequests ? (
               <Loader />
             ) : (
               <div className="flex-1 overflow-auto space-y-3 pr-2">
-                {requests.map((r) => (
-                  <motion.article
-                    key={r.id}
-                    initial={{ opacity: 0, y: 6 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="border rounded-lg p-3"
-                  >
-                    <div className="flex items-start justify-between gap-3">
+                {requests && requests.length > 0 ? (
+                  requests.map((r) => (
+                    <motion.article
+                      key={r.id}
+                      initial={{ opacity: 0, y: 6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="border rounded-lg p-3"
+                    >
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <div className="font-semibold">
+                            {r.name}{" "}
+                            <span className="text-xs text-gray-400">
+                              (#{r.id})
+                            </span>
+                          </div>
+                          <div className="text-sm text-gray-600">
+                            {r.email} • {r.phone}
+                          </div>
+                          <div className="text-sm text-gray-600">
+                            Start: {r.possibleStartDate}
+                          </div>
+                          <div className="mt-2 text-sm text-gray-700">
+                            {r.message}
+                          </div>
+                        </div>
+                        <div className="flex flex-col gap-2 shrink-0">
+                          <button
+                            onClick={() => setRequestActive(r.id)}
+                            className="px-3 py-2 bg-gray-500 text-white rounded-md"
+                          >
+                            Aktiválás
+                          </button>
+                          <button
+                            onClick={() => openConfirmDialog(r.id)}
+                            className="px-3 py-2 bg-red-500 text-white rounded-md"
+                          >
+                            Törlés
+                          </button>
+                        </div>
+                      </div>
+                    </motion.article>
+                  ))
+                ) : (
+                  <span className="flex justify-center italic text-gray-500">
+                    Nincsenek ajánlatkérések
+                  </span>
+                )}
+              </div>
+            )}
+          </div>
+
+          {/* Rents */}
+          <div className="bg-white rounded-2xl shadow p-4 flex flex-col h-screen">
+            <h3 className="font-semibold mb-3">Aktív bérlések</h3>
+            {loadingRequests ? (
+              <Loader />
+            ) : (
+              <div className="flex-1 overflow-auto space-y-3 pr-2">
+                {rents && rents.length > 0 ? (
+                  rents.map((r) => (
+                    <motion.article
+                      key={r.id}
+                      initial={{ opacity: 0, y: 6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="border rounded-lg p-3 flex items-center justify-between"
+                    >
                       <div>
                         <div className="font-semibold">
                           {r.name}{" "}
@@ -446,72 +558,30 @@ export function DashBoard() {
                           {r.email} • {r.phone}
                         </div>
                         <div className="text-sm text-gray-600">
-                          Start: {r.possibleStartDate}
-                        </div>
-                        <div className="mt-2 text-sm text-gray-700">
-                          {r.message}
+                          Start: {r.startDate}
                         </div>
                       </div>
-                      <div className="flex flex-col gap-2 shrink-0">
+                      <div className="flex flex-col gap-2">
                         <button
-                          onClick={() => startRequest(r.id)}
+                          onClick={() => setRentNotActivity(r.id)}
                           className="px-3 py-2 bg-gray-500 text-white rounded-md"
                         >
-                          Aktiválás
+                          Leállítás
                         </button>
                         <button
-                          onClick={() => deleteRequest(r.id)}
+                          onClick={() => openConfirmDialog(r.id)}
                           className="px-3 py-2 bg-red-500 text-white rounded-md"
                         >
                           Törlés
                         </button>
                       </div>
-                    </div>
-                  </motion.article>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* Rents */}
-          <div className="bg-white rounded-2xl shadow p-4 flex flex-col h-screen">
-            <h3 className="font-semibold mb-3">Aktív bérlések</h3>
-            {loading ? (
-              <Loader />
-            ) : (
-              <div className="flex-1 overflow-auto space-y-3 pr-2">
-                {rents.map((r) => (
-                  <motion.article
-                    key={r.id}
-                    initial={{ opacity: 0, y: 6 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="border rounded-lg p-3 flex items-center justify-between"
-                  >
-                    <div>
-                      <div className="font-semibold">{r.name}</div>
-                      <div className="text-sm text-gray-600">
-                        {r.email} • {r.phone}
-                      </div>
-                      <div className="text-sm text-gray-600">
-                        Start: {r.startDate}
-                      </div>
-                    </div>
-                    <div className="flex flex-col gap-2">
-                      <button
-                        onClick={() => stopRent(r.id)}
-                        className="px-3 py-2 bg-gray-500 text-white rounded-md"
-                      >
-                        Leállítás
-                      </button>
-                      <button
-                        onClick={() => deleteRent(r.id)}
-                        className="px-3 py-2 bg-red-500 text-white rounded-md"
-                      >
-                        Törlés
-                      </button>
-                    </div>
-                  </motion.article>
-                ))}
+                    </motion.article>
+                  ))
+                ) : (
+                  <span className="flex justify-center italic text-gray-500">
+                    Nincsenek aktív elemek
+                  </span>
+                )}
               </div>
             )}
           </div>
@@ -519,42 +589,58 @@ export function DashBoard() {
           {/* Logs */}
           <div className="bg-white rounded-2xl shadow p-4 flex flex-col md:col-span-3">
             <h3 className="font-semibold mb-3">Tevékenység (utolsó 30 nap)</h3>
-            {loading ? (
+            {loadingLogs ? (
               <Loader />
             ) : (
               <>
                 <div className="flex-1 overflow-auto">
                   <ul className="space-y-2">
-                    {currentLogs.map((log, idx) => (
-                      <li
-                        key={idx}
-                        className="text-sm text-gray-700 border-b pb-2"
-                      >
-                        {log}
-                      </li>
-                    ))}
+                    {currentLogs && currentLogs.length > 0 ? (
+                      currentLogs.map((log, idx) => (
+                        <li
+                          key={`log_${idx}`}
+                          className={`text-sm text-gray-700 border-b pb-2 ${log.important ? "font-bold" : ""}`}
+                        >
+                          {log.text}, ekkor: {new Date(log.recordedTime).toLocaleString()}
+                        </li>
+                      ))
+                    ) : (
+                      <span className="flex justify-center italic text-gray-500">
+                        Nincsenek bejegyzések
+                      </span>
+                    )}
                   </ul>
                 </div>
                 <div className="mt-3 flex justify-between">
-                  <button
-                    onClick={() => setLogPage((p) => Math.max(0, p - 1))}
-                    className="px-3 py-2 bg-gray-100 rounded-md"
-                  >
-                    <ArrowBackIcon />
-                  </button>
-                  <button
-                    onClick={() =>
-                      setLogPage((p) => Math.min(maxLogPage, p + 1))
-                    }
-                    className="px-3 py-2 bg-gray-100 rounded-md"
-                  >
-                    <ArrowForwardIcon />
-                  </button>
+                  {currentLogs && currentLogs.length > 10 && (
+                    <>
+                      <button
+                        onClick={() => setLogPage((p) => Math.max(0, p - 1))}
+                        className="px-3 py-2 bg-gray-100 rounded-md"
+                      >
+                        <ArrowBackIcon />
+                      </button>
+                      <button
+                        onClick={() =>
+                          setLogPage((p) => Math.min(maxLogPage, p + 1))
+                        }
+                        className="px-3 py-2 bg-gray-100 rounded-md"
+                      >
+                        <ArrowForwardIcon />
+                      </button>
+                    </>
+                  )}
                 </div>
               </>
             )}
           </div>
         </section>
+        <ConfirmDialog
+          isOpen={isDialogOpen}
+          setIsOpen={setIsDialogOpen}
+          id={idToDelete}
+          callback={deleteElement}
+        />
       </div>
     </div>
   );

@@ -10,5 +10,11 @@ namespace asp.net_web_api.Models
 
         [NotNull]
         public string Text { get; set; } = string.Empty;
+
+        [NotNull]
+        public DateTime? RecordedTime { get; set; }
+
+        [NotNull]
+        public bool Important { get; set; }
     }
 }

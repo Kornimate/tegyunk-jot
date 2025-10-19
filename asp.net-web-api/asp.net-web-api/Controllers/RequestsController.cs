@@ -3,6 +3,7 @@ using asp.net_web_api.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace asp.net_web_api.Controllers
 {
@@ -21,19 +22,53 @@ namespace asp.net_web_api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetRequests()
         {
-            return Ok(await _context.Requests.ToListAsync());
+            return Ok(await _context.Requests.
+                                Where(x => !x.IsDeleted)
+                                .ToListAsync());
         }
 
         [HttpPut("edit")]
         public async Task<IActionResult> PutRequestActivityChange([FromBody] RequestDto dto)
         {
-            return await Task.FromResult(Ok());
+            var request = await _context.Requests.FirstOrDefaultAsync(x => x.Id == dto.Id);
+
+            if (request is null)
+                return BadRequest();
+
+            request.IsActiveRequest = dto.IsActive;
+
+            await _context.Logs.AddAsync(new LogEntry
+            {
+                RecordedTime = DateTime.UtcNow,
+                Important = true,
+                Text = $"A (#{request.Id}) {(dto.IsActive ? "ajánlatkérés" : "aktív bérlés")} állapotát megváltoztatta {(dto.IsActive? "aktívra" : "nem aktívra")} {User.FindFirst(ClaimTypes.Name)?.Value}"
+            });
+
+            await _context.SaveChangesAsync();
+
+            return Ok();
         }
 
-        [HttpDelete("delete")]
-        public async Task<IActionResult> DeleteRequest(int id)
+        [HttpDelete("delete/{id}")]
+        public async Task<IActionResult> DeleteRequest([FromRoute] int id)
         {
-            return await Task.FromResult(Ok());
+            var request = await _context.Requests.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (request is null)
+                return BadRequest();
+
+            _context.Requests.Remove(request);
+
+            await _context.Logs.AddAsync(new LogEntry
+            {
+                RecordedTime = DateTime.UtcNow,
+                Important = true,
+                Text = $"Az (#{id}) elem törölve lett {User.FindFirst(ClaimTypes.Name)?.Value} által"
+            });
+
+            await _context.SaveChangesAsync();
+
+            return Ok();
         }
 
     }

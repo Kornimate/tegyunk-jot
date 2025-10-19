@@ -10,6 +10,13 @@ namespace asp.net_web_api.Controllers
     [Route("api/webvisit")]
     public class WebVisitController : ControllerBase
     {
+        private readonly AppDbContext _context;
+
+        public WebVisitController(AppDbContext context)
+        {
+            _context = context;
+        }
+
         [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetAnalytics()
@@ -17,14 +24,14 @@ namespace asp.net_web_api.Controllers
             var today = DateTime.UtcNow.Date;
 
             var last14days = Enumerable
-                                .Range(0, 14)
+                                .Range(0, 10)
                                 .Select(x => today.AddDays((-1) * x))
                                 .ToList();
 
             var visitCounts = await _context.WebVisits.
-                                    Where(x => x.RecordedTime >= today.AddDays(-13) && x.RecordedTime <= today)
+                                    Where(x => x.RecordedTime >= today.AddDays(-9))
                                     .GroupBy(x => x.RecordedTime.Date)
-                                    .Select( x=> new
+                                    .Select(x => new
                                     {
                                         Date = x.Key,
                                         Count = x.Count()
@@ -47,11 +54,19 @@ namespace asp.net_web_api.Controllers
             return Ok(result);
         }
 
-        private readonly AppDbContext _context;
-
-        public WebVisitController(AppDbContext context)
+        [Authorize]
+        [HttpGet("coordinates")]
+        public async Task<IActionResult> GetVisitCoordinates()
         {
-            _context = context;
+            return Ok(await _context.WebVisits
+                                .Where(x => x.RecordedTime >= DateTime.UtcNow.Date.AddDays(-9))
+                                .Select(x => new WebVisitDto
+                                {
+                                    Id = x.Id.ToString(),
+                                    Name = $"Hely",
+                                    Coords = new[] { x.LatitudeCoord, x.LongitudeCoord }
+                                })
+                                .ToListAsync());
         }
 
         [AllowAnonymous]
@@ -60,8 +75,8 @@ namespace asp.net_web_api.Controllers
         {
             await _context.AddAsync(new WebVisit
             {
-                LongitudeCoord = dto.LongitudeCoord,
-                LatitudeCoord = dto.LatitudeCoord,
+                LatitudeCoord = dto.Coords[0],
+                LongitudeCoord = dto.Coords[1],
             });
 
             return Ok();
