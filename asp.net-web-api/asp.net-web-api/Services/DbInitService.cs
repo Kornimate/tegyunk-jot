@@ -92,6 +92,20 @@ namespace asp.net_web_api.Services
                     ]);
             }
 
+            if (!_context.Resources.Any())
+            {
+                _context.Resources.AddRange([
+                    new Resource{
+                        Name="Kórházi ágy",
+                        Value = 10,
+                    },
+                    new Resource{
+                        Name="CPM gép",
+                        Value = 5,
+                    },
+                    ]);
+            }
+
             _context.SaveChanges();
 
             return true;

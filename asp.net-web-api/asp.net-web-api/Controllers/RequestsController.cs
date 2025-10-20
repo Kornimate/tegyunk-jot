@@ -24,10 +24,11 @@ namespace asp.net_web_api.Controllers
         {
             return Ok(await _context.Requests
                                 .Where(x => !x.IsDeleted)
+                                .OrderBy(x => x.CreatedTime)
                                 .ToListAsync());
         }
 
-        [HttpPut("edit")]
+        [HttpPut("update")]
         public async Task<IActionResult> PutRequestActivityChange([FromBody] RequestModificationDto dto)
         {
             var request = await _context.Requests.FirstOrDefaultAsync(x => x.Id == dto.Id);
@@ -61,6 +62,7 @@ namespace asp.net_web_api.Controllers
                 PhoneNumber = dto.PhoneNumber,
                 PossibleStartDate = dto.PossibleStartDate,
                 Message = dto.Message,
+                CreatedTime = DateTime.UtcNow
             });
 
             await _context.Logs.AddAsync(new LogEntry

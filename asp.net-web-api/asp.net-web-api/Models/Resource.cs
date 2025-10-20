@@ -15,8 +15,5 @@ namespace asp.net_web_api.Models
 
         [NotNull]
         public int Value { get; set; }
-
-        [NotNull]
-        public bool IsActiveResource { get; set; }
     }
 }

@@ -26,6 +26,7 @@ namespace asp.net_web_api.Models
         public DateTime? PossibleStartDate { get; set; }
         public DateTime? ActivatedDate { get; set; }
         public DateTime? FinishedDate { get; set; }
+        public DateTime? CreatedTime { get; set; }
         public bool IsActiveRequest { get; set; } = false;
         public bool IsDeleted { get; set; } = false;
     }

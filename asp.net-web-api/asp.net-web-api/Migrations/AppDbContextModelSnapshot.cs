@@ -179,6 +179,9 @@ namespace asp.net_web_api.Migrations
                     b.Property<DateTime?>("ActivatedDate")
                         .HasColumnType("TEXT");
 
+                    b.Property<DateTime?>("CreatedTime")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -219,9 +222,6 @@ namespace asp.net_web_api.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<bool>("IsActiveResource")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")

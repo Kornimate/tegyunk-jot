@@ -3,6 +3,7 @@ using asp.net_web_api.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace asp.net_web_api.Controllers
 {
@@ -20,7 +21,9 @@ namespace asp.net_web_api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetResources()
         {
-            return Ok(await _context.Resources.ToListAsync());
+            return Ok(await _context.Resources
+                                .OrderBy(x => x.Id)
+                                .ToListAsync());
         }
 
         [HttpGet("machines")]
@@ -35,7 +38,7 @@ namespace asp.net_web_api.Controllers
                             })));
         }
 
-        [HttpPut("edit")]
+        [HttpPut("update")]
         public async Task<IActionResult> PutNewResourceValue([FromBody] ResourcesDto dto)
         {
             var setting = await _context.Resources.FirstOrDefaultAsync(x => x.Id == dto.Id);
@@ -44,6 +47,13 @@ namespace asp.net_web_api.Controllers
                 return BadRequest();
 
             setting.Value = dto.NewValue;
+
+            await _context.Logs.AddAsync(new LogEntry
+            {
+                RecordedTime = DateTime.UtcNow,
+                Important = true,
+                Text = $"A(z) (#{setting.Id}) {setting.Name} új értéket kapott: {setting.Value}. {User.FindFirst(ClaimTypes.Name)?.Value} által"
+            });
 
             await _context.SaveChangesAsync();
 

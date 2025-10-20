@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace asp.net_web_api.Migrations
 {
     /// <inheritdoc />
-    public partial class dbschema1 : Migration
+    public partial class dbschema : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -78,6 +78,7 @@ namespace asp.net_web_api.Migrations
                     PossibleStartDate = table.Column<DateTime>(type: "TEXT", nullable: true),
                     ActivatedDate = table.Column<DateTime>(type: "TEXT", nullable: true),
                     FinishedDate = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    CreatedTime = table.Column<DateTime>(type: "TEXT", nullable: true),
                     IsActiveRequest = table.Column<bool>(type: "INTEGER", nullable: false),
                     IsDeleted = table.Column<bool>(type: "INTEGER", nullable: false)
                 },
@@ -93,8 +94,7 @@ namespace asp.net_web_api.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(type: "TEXT", nullable: false),
-                    Value = table.Column<int>(type: "INTEGER", nullable: false),
-                    IsActiveResource = table.Column<bool>(type: "INTEGER", nullable: false)
+                    Value = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {

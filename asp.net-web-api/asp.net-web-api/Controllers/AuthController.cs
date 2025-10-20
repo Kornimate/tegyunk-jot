@@ -56,5 +56,20 @@ namespace asp.net_web_api.Controllers
                 return Unauthorized();
             }
         }
+
+        [Authorize]
+        [HttpGet("fast")]
+        public async Task<IActionResult> FastAuth()
+        {
+            await _context.Logs.AddAsync(new LogEntry
+            {
+                RecordedTime = DateTime.UtcNow,
+                Text = $"{User.FindFirst(ClaimTypes.Name)?.Value} bejelentkezett"
+            });
+
+            await _context.SaveChangesAsync();
+
+            return await Task.FromResult(Ok());
+        }
     }
 }

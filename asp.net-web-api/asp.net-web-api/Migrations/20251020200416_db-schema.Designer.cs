@@ -11,8 +11,8 @@ using asp.net_web_api.Models;
 namespace asp.net_web_api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251018230036_db-schema#1")]
-    partial class dbschema1
+    [Migration("20251020200416_db-schema")]
+    partial class dbschema
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -182,6 +182,9 @@ namespace asp.net_web_api.Migrations
                     b.Property<DateTime?>("ActivatedDate")
                         .HasColumnType("TEXT");
 
+                    b.Property<DateTime?>("CreatedTime")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -222,9 +225,6 @@ namespace asp.net_web_api.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<bool>("IsActiveResource")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")

@@ -23,6 +23,7 @@ import axios from "axios";
 import { ConfirmDeleteDialog } from "../components/ConfirmDeleteDialog";
 import { ConfirmRequestStartDialog } from "../components/ConfirmRequestStartDialog";
 import "../styles/leaflet-overrides.css";
+import { SettingsHandler } from "../components/SettingsHandler";
 
 // ---------- Sample data ----------
 const bedsPieData = [
@@ -83,6 +84,7 @@ export function DashBoard() {
   const [visits, setVisits] = useState(visitsData);
   const [pins, setPins] = useState(mapPins);
   const [machines, setMachines] = useState([]);
+  const [settings, setSettings] = useState([]);
   const [cpmCount, setCpmCount] = useState(0);
   const [hBedCount, setHBendCount] = useState(0);
   const { token, logout } = useAuth();
@@ -119,6 +121,7 @@ export function DashBoard() {
   const [loadingRequests, setLoadingRequests] = useState(true);
   const [loadingLogs, setLoadingLogs] = useState(true);
   const [loadingVisits, setLoadingVisits] = useState(true);
+  const [loadingSettings, setLoadingSettings] = useState(true);
 
   const refreshRequests = useCallback(async () => {
     const responseRequests = await api.get("/api/requests");
@@ -174,16 +177,23 @@ export function DashBoard() {
     setMachines(responseMachines.data);
   }, [api]);
 
+  const refreshSettings = useCallback(async () => {
+    const responseSettings = await api.get("/api/resources");
+    setSettings(responseSettings.data);
+  }, [api]);
+
   useEffect(() => {
     setLoadingRequests(true);
     setLoadingLogs(true);
     setLoadingVisits(true);
+    setLoadingSettings(true);
 
     async function apiCalls() {
       await refreshRequests();
       await refreshVisits();
       await refreshLogs();
       await refreshMachines();
+      await refreshSettings();
     }
 
     apiCalls();
@@ -191,12 +201,19 @@ export function DashBoard() {
     setLoadingRequests(false);
     setLoadingLogs(false);
     setLoadingVisits(false);
-  }, [refreshRequests, refreshVisits, refreshLogs, refreshMachines]);
+    setLoadingSettings(false);
+  }, [
+    refreshRequests,
+    refreshVisits,
+    refreshLogs,
+    refreshMachines,
+    refreshSettings,
+  ]);
 
   async function setRequestActive(id, machineId) {
     setLoadingRequests(true);
 
-    await api.put("/api/requests/edit", {
+    await api.put("/api/requests/update", {
       id: id,
       isActive: true,
       machine: machineId,
@@ -242,6 +259,19 @@ export function DashBoard() {
     setLoadingRequests(false);
   }
 
+  async function putNewResourceValue(id, newValue) {
+    await api.put("/api/resources/update", {
+      id: id,
+      newValue: newValue,
+    });
+
+    alert(`Az érték megváltozott, új érték: ${newValue}`);
+
+    setLoadingLogs(true);
+    refreshLogs();
+    setLoadingLogs(false);
+  }
+
   async function openConfirmDeleteDialog(id) {
     setIdToDelete(id);
     setIsDeleteDialogOpen(true);
@@ -250,24 +280,6 @@ export function DashBoard() {
   async function openConfirmActivateDialog(id) {
     setIdToActivate(id);
     setIsActivateDialogOpen(true);
-  }
-
-  function hBedsChanged(e){
-    if(e.target.value === ""){
-      setHBendCount(0)
-      return;
-    }
-
-    setHBendCount(e.target.value)
-  }
-
-  function cpmsChanged(e){
-    if(e.target.value === ""){
-      setCpmCount(0)
-      return;
-    }
-
-    setCpmCount(e.target.value)
   }
 
   function SignOut() {
@@ -391,7 +403,7 @@ export function DashBoard() {
                   </ResponsiveContainer>
                 </div>
                 <div className="mt-3 text-sm text-gray-500">
-                  Összes ágy: {bedsAreaData[0]?.total || 0}
+                  Összes ágy: {hBedCount}
                 </div>
               </>
             )}
@@ -485,7 +497,7 @@ export function DashBoard() {
                   </ResponsiveContainer>
                 </div>
                 <div className="mt-3 text-sm text-gray-500">
-                  Összes CPM gép: {bedsAreaData[0]?.total || 0}
+                  Összes CPM gép: {cpmCount}
                 </div>
               </>
             )}
@@ -537,17 +549,35 @@ export function DashBoard() {
           </div>
         </section>
 
-        <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="bg-white rounded-2xl shadow p-4">
-            <label
-              htmlFor="bedsCount"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
-              Kórházi ágyak (db)
-            </label>
-            <input id="bedsCount" type="number" value={hBedCount} onChange={hBedsChanged} />
+        <section className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="bg-white rounded-2xl shadow p-4 justify-items-center text-center">
+            {/* settings[0] is hospital beds!*/}
+            {loadingSettings ? (
+              <Loader />
+            ) : (
+              <SettingsHandler
+                labelText={"Kórházi ágyak (db)"}
+                btnText={"Mentés"}
+                initCount={settings[0]}
+                apiCallCallback={putNewResourceValue}
+                setterCallback={setHBendCount}
+              />
+            )}
           </div>
-          <div className="bg-white rounded-2xl shadow p-4"></div>
+          <div className="bg-white rounded-2xl shadow p-4 justify-items-center text-center">
+            {/* settings[1] is cpm machines*/}
+            {loadingSettings ? (
+              <Loader />
+            ) : (
+              <SettingsHandler
+                labelText={"CPM gépek (db)"}
+                btnText={"Mentés"}
+                initCount={settings[1]}
+                apiCallCallback={putNewResourceValue}
+                setterCallback={setCpmCount}
+              />
+            )}
+          </div>
         </section>
 
         {/* Requests + Active rents + Logs */}
@@ -591,13 +621,13 @@ export function DashBoard() {
                         <div className="flex flex-col gap-2 shrink-0">
                           <button
                             onClick={() => openConfirmActivateDialog(r.id)}
-                            className="px-3 py-2 bg-gray-500 text-white rounded-md"
+                            className="px-3 py-2 bg-gray-500 text-white rounded-md  hover:bg-gray-600"
                           >
                             Aktiválás
                           </button>
                           <button
                             onClick={() => openConfirmDeleteDialog(r.id)}
-                            className="px-3 py-2 bg-red-500 text-white rounded-md"
+                            className="px-3 py-2 bg-red-500 text-white rounded-md  hover:bg-red-600"
                           >
                             Törlés
                           </button>
@@ -649,13 +679,13 @@ export function DashBoard() {
                       <div className="flex flex-col gap-2">
                         <button
                           onClick={() => setRentNotActivity(r.id)}
-                          className="px-3 py-2 bg-gray-500 text-white rounded-md"
+                          className="px-3 py-2 bg-gray-500 text-white rounded-md  hover:bg-gray-600"
                         >
                           Leállítás
                         </button>
                         <button
                           onClick={() => openConfirmDeleteDialog(r.id)}
-                          className="px-3 py-2 bg-red-500 text-white rounded-md"
+                          className="px-3 py-2 bg-red-500 text-white rounded-md  hover:bg-red-600"
                         >
                           Törlés
                         </button>
@@ -740,13 +770,3 @@ export function DashBoard() {
     </div>
   );
 }
-
-{/* <div class="flex flex-col gap-4 w-full max-w-xs">
-<label class="text-sm font-medium text-gray-700">Quantity</label>
-<input
-type="number"
-placeholder="Enter a number"
-class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-/>
-<button class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">Save</button>
-</div> */}
