@@ -83,6 +83,8 @@ export function DashBoard() {
   const [visits, setVisits] = useState(visitsData);
   const [pins, setPins] = useState(mapPins);
   const [machines, setMachines] = useState([]);
+  const [cpmCount, setCpmCount] = useState(0);
+  const [hBedCount, setHBendCount] = useState(0);
   const { token, logout } = useAuth();
 
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -248,6 +250,24 @@ export function DashBoard() {
   async function openConfirmActivateDialog(id) {
     setIdToActivate(id);
     setIsActivateDialogOpen(true);
+  }
+
+  function hBedsChanged(e){
+    if(e.target.value === ""){
+      setHBendCount(0)
+      return;
+    }
+
+    setHBendCount(e.target.value)
+  }
+
+  function cpmsChanged(e){
+    if(e.target.value === ""){
+      setCpmCount(0)
+      return;
+    }
+
+    setCpmCount(e.target.value)
   }
 
   function SignOut() {
@@ -517,6 +537,19 @@ export function DashBoard() {
           </div>
         </section>
 
+        <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="bg-white rounded-2xl shadow p-4">
+            <label
+              htmlFor="bedsCount"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
+              Kórházi ágyak (db)
+            </label>
+            <input id="bedsCount" type="number" value={hBedCount} onChange={hBedsChanged} />
+          </div>
+          <div className="bg-white rounded-2xl shadow p-4"></div>
+        </section>
+
         {/* Requests + Active rents + Logs */}
         <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Requests */}
@@ -707,3 +740,13 @@ export function DashBoard() {
     </div>
   );
 }
+
+{/* <div class="flex flex-col gap-4 w-full max-w-xs">
+<label class="text-sm font-medium text-gray-700">Quantity</label>
+<input
+type="number"
+placeholder="Enter a number"
+class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+/>
+<button class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">Save</button>
+</div> */}
