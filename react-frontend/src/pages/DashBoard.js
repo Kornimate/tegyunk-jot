@@ -24,76 +24,40 @@ import { ConfirmDeleteDialog } from "../components/ConfirmDeleteDialog";
 import { ConfirmRequestStartDialog } from "../components/ConfirmRequestStartDialog";
 import "../styles/leaflet-overrides.css";
 import { SettingsHandler } from "../components/SettingsHandler";
+import { RequestDialog } from "../components/RequestDialog";
+import { compareDate1IsOlder } from "../services/dateService";
+import Download from "../components/Download";
 
-// ---------- Sample data ----------
-const bedsPieData = [
-  { name: "Active supply", value: 72 },
-  { name: "Passive supply", value: 28 },
-];
-const cpmsPieData = [
-  { name: "Active supply", value: 35 },
-  { name: "Passive supply", value: 65 },
-];
 const DONUT_COLORS = ["#EF4444", "#000"];
-
-const visitsData = Array.from({ length: 10 }).map((_, i) => ({
-  date: `Day ${i + 1}`,
-  visits: Math.floor(200 + Math.random() * 800),
-}));
-
-const bedsAreaData = Array.from({ length: 14 }).map((_, i) => ({
-  date: `D-${13 - i}`,
-  used: Math.floor(40 + Math.random() * 120),
-  total: 200,
-}));
-const cpmsAreaData = Array.from({ length: 14 }).map((_, i) => ({
-  date: `D-${13 - i}`,
-  used: Math.floor(40 + Math.random() * 120),
-  total: 200,
-}));
-const mapPins = [
-  { id: 1, name: "Center Hospital A", coords: [48.1118, 20.80101] },
-  { id: 2, name: "Clinic B", coords: [48.2, 20.5] },
-  { id: 3, name: "Depot C", coords: [48.0, 20.9] },
-];
-const SAMPLE_REQUESTS = Array.from({ length: 18 }).map((_, i) => ({
-  id: `REQ-${1000 + i}`,
-  name: `Requester ${i + 1}`,
-  email: `user${i + 1}@example.com`,
-  phone: `+36 30 123 45${String(i).padStart(2, "0")}`,
-  startDate: "2025-10-15",
-  message: "Kérem a bérlést rövid időre.",
-}));
-const SAMPLE_RENTS = Array.from({ length: 8 }).map((_, i) => ({
-  id: `RENT-${200 + i}`,
-  name: `Tenant ${i + 1}`,
-  email: `tenant${i + 1}@example.com`,
-  phone: `+36 20 555 00${i}`,
-  startDate: "2025-09-10",
-}));
-const SAMPLE_LOGS = Array.from({ length: 53 }).map(
-  (_, i) =>
-    `Log entry #${i + 1} — action happened at ${new Date().toISOString()}`
-);
 
 // ---------- Dashboard component ----------
 export function DashBoard() {
-  const [requests, setRequests] = useState(SAMPLE_REQUESTS);
-  const [rents, setRents] = useState(SAMPLE_RENTS);
-  const [logs, setLogs] = useState(SAMPLE_LOGS);
-  const [visits, setVisits] = useState(visitsData);
-  const [pins, setPins] = useState(mapPins);
+  const [requests, setRequests] = useState([]);
+  const [rents, setRents] = useState([]);
+  const [logs, setLogs] = useState([]);
+  const [visits, setVisits] = useState([]);
+  const [pins, setPins] = useState([]);
   const [machines, setMachines] = useState([]);
   const [settings, setSettings] = useState([]);
   const [cpmCount, setCpmCount] = useState(0);
   const [hBedCount, setHBendCount] = useState(0);
-  const { token, logout } = useAuth();
+  const [bedsAreaData, setBedsAreaData] = useState([]);
+  const [cpmsAreaData, setCpmsAreaData] = useState([]);
+  const [bedsPieData, setBedsPieData] = useState([]);
+  const [cpmsPieData, setCpmsPieData] = useState([]);
+  const { token, logout, email } = useAuth();
 
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [idToDelete, setIdToDelete] = useState(null);
 
   const [isActivateDialogOpen, setIsActivateDialogOpen] = useState(false);
   const [idToActivate, setIdToActivate] = useState(null);
+
+  const [isRequestDialogOpen, setRequestDialogOpen] = useState(false);
+  const [requestDialogData, setRequestDialogData] = useState(null);
+
+  const [activeCpms, setActiveCpms] = useState(0);
+  const [activeBeds, setActiveBeds] = useState(0);
 
   const LOGS_PER_PAGE = 10;
   const [logPage, setLogPage] = useState(0);
@@ -131,8 +95,12 @@ export function DashBoard() {
         .map((x) => ({
           ...x,
           possibleStartDate: x.possibleStartDate
-            ? new Date(x.possibleStartDate)
+            ? new Date(x.possibleStartDate + "Z")
             : null,
+          activatedDate: x.activatedDate
+            ? new Date(x.activatedDate + "Z")
+            : null,
+          createdTime: x.createdTime ? new Date(x.createdTime + "Z") : null,
         }))
     );
     setRents(
@@ -143,6 +111,10 @@ export function DashBoard() {
           possibleStartDate: x.possibleStartDate
             ? new Date(x.possibleStartDate)
             : null,
+          activatedDate: x.activatedDate
+            ? new Date(x.activatedDate + "Z")
+            : null,
+          createdTime: x.createdTime ? new Date(x.createdTime + "Z") : null,
         }))
     );
   }, [api]);
@@ -210,8 +182,84 @@ export function DashBoard() {
     refreshSettings,
   ]);
 
+  useEffect(() => {
+    const cpmsData = [];
+    const bedsData = [];
+
+    const cpmRents = rents.filter((x) => x.machine === 1);
+    const bedRents = rents.filter((x) => x.machine === 2);
+
+    setActiveCpms(cpmRents.filter((x) => x.isActiveRequest).length);
+    setActiveBeds(bedRents.filter((x) => x.isActiveRequest).length);
+
+    console.log(cpmRents);
+
+    const day = new Date();
+    day.setDate(day.getDate() - 13);
+
+    for (let i = 0; i < 14; i++) {
+      let counter = 0;
+
+      for (let j = 0; j < cpmRents.length; j++) {
+        if (compareDate1IsOlder(cpmRents[j].activatedDate, day)) {
+          counter++;
+        }
+      }
+      cpmsData.push({
+        date: `D-${13 - i}`,
+        used: counter,
+      });
+
+      counter = 0;
+
+      for (let j = 0; j < bedRents.length; j++) {
+        console.log(
+          compareDate1IsOlder(bedRents[j].activatedDate, day),
+          bedRents[j].activatedDate,
+          day
+        );
+        if (compareDate1IsOlder(bedRents[j].activatedDate, day)) {
+          counter++;
+        }
+      }
+      bedsData.push({
+        date: `D-${13 - i}`,
+        used: counter,
+      });
+
+      day.setDate(day.getDate() + 1);
+    }
+
+    setBedsAreaData(bedsData);
+    setCpmsAreaData(cpmsData);
+  }, [rents]);
+
+  useEffect(() => {
+    setCpmsPieData([
+      { name: "Kiadott", value: activeCpms },
+      { name: "Raktárban", value: cpmCount - activeCpms },
+    ]);
+  }, [cpmCount, activeCpms]);
+
+  useEffect(() => {
+    setBedsPieData([
+      { name: "Kiadott", value: activeBeds },
+      { name: "Raktárban", value: hBedCount - activeBeds },
+    ]);
+  }, [hBedCount, activeBeds]);
+
   async function setRequestActive(id, machineId) {
     setLoadingRequests(true);
+
+    if (machineId === 1 && cpmCount === activeCpms) {
+      alert("Nincs szabad CPM gép kiadásra!");
+      return;
+    }
+
+    if (machineId === 2 && hBedCount === activeBeds) {
+      alert("Nincs szabad Kórházi ágy kiadásra!");
+      return;
+    }
 
     await api.put("/api/requests/update", {
       id: id,
@@ -228,10 +276,11 @@ export function DashBoard() {
     setLoadingRequests(false);
   }
 
-  async function setRentNotActivity(id) {
+  async function setRentNotActive(id, event) {
+    event.stopPropagation();
     setLoadingRequests(true);
 
-    await api.put("/api/requests/edit", {
+    await api.put("/api/requests/update", {
       id: id,
       isActive: false,
     });
@@ -272,14 +321,21 @@ export function DashBoard() {
     setLoadingLogs(false);
   }
 
-  async function openConfirmDeleteDialog(id) {
+  async function openConfirmDeleteDialog(id, event) {
+    event.stopPropagation();
     setIdToDelete(id);
     setIsDeleteDialogOpen(true);
   }
 
-  async function openConfirmActivateDialog(id) {
+  async function openConfirmActivateDialog(id, event) {
+    event.stopPropagation();
     setIdToActivate(id);
     setIsActivateDialogOpen(true);
+  }
+
+  async function openRequestDialog(requestData) {
+    setRequestDialogData(requestData);
+    setRequestDialogOpen(true);
   }
 
   function SignOut() {
@@ -301,8 +357,7 @@ export function DashBoard() {
           </div>
           <div className="flex items-center gap-3 my-2">
             <div className="text-sm text-gray-600">
-              Bejelentkezve:{" "}
-              <span className="font-medium">admin@example.com</span>
+              Bejelentkezve: <span className="font-medium">{email()}</span>
             </div>
           </div>
           <button
@@ -335,7 +390,7 @@ export function DashBoard() {
                         startAngle={90}
                         endAngle={-270}
                       >
-                        {bedsPieData.map((entry, i) => (
+                        {bedsPieData.map((_, i) => (
                           <Cell
                             key={i}
                             fill={DONUT_COLORS[i % DONUT_COLORS.length]}
@@ -348,9 +403,11 @@ export function DashBoard() {
                 <div className="mt-3 flex gap-3 text-sm">
                   <div className="flex items-center gap-2">
                     <span className="w-3 h-3 bg-red-500 rounded-full" /> Kiadott
+                    ({activeBeds})
                   </div>
-                  <div className="flex items-center gap-2 text-gray-500">
+                  <div className="flex items-center gap-2">
                     <span className="w-3 h-3 bg-black rounded-full" /> Raktárban
+                    ({hBedCount - activeBeds})
                   </div>
                 </div>
               </>
@@ -429,7 +486,7 @@ export function DashBoard() {
                         startAngle={90}
                         endAngle={-270}
                       >
-                        {cpmsPieData.map((entry, i) => (
+                        {cpmsPieData.map((_, i) => (
                           <Cell
                             key={i}
                             fill={DONUT_COLORS[i % DONUT_COLORS.length]}
@@ -442,9 +499,11 @@ export function DashBoard() {
                 <div className="mt-3 flex gap-3 text-sm">
                   <div className="flex items-center gap-2">
                     <span className="w-3 h-3 bg-red-500 rounded-full" /> Kiadott
+                    ({activeCpms})
                   </div>
-                  <div className="flex items-center gap-2 text-gray-500">
+                  <div className="flex items-center gap-2">
                     <span className="w-3 h-3 bg-black rounded-full" /> Raktárban
+                    ({cpmCount - activeCpms})
                   </div>
                 </div>
               </>
@@ -584,7 +643,14 @@ export function DashBoard() {
         <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Requests */}
           <div className="bg-white rounded-2xl shadow p-4 lg:col-span-2 flex flex-col h-screen">
-            <h3 className="font-semibold mb-3">Ajánlatkérések</h3>
+            <div className="flex justify-between mb-3">
+              <h3 className="font-semibold mb-3">Ajánlatkérések</h3>
+              <Download
+                data={requests}
+                sheetName={"Ajánlatkérés lista"}
+                fileName={"ajanlatkeresek"}
+              />
+            </div>
             {loadingRequests ? (
               <Loader />
             ) : (
@@ -595,7 +661,8 @@ export function DashBoard() {
                       key={r.id}
                       initial={{ opacity: 0, y: 6 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="border rounded-lg p-3"
+                      className="border rounded-lg p-3 cursor-pointer hover:bg-gray-100"
+                      onClick={() => openRequestDialog(r)}
                     >
                       <div className="flex items-start justify-between gap-3">
                         <div>
@@ -620,13 +687,13 @@ export function DashBoard() {
                         </div>
                         <div className="flex flex-col gap-2 shrink-0">
                           <button
-                            onClick={() => openConfirmActivateDialog(r.id)}
+                            onClick={(e) => openConfirmActivateDialog(r.id, e)}
                             className="px-3 py-2 bg-gray-500 text-white rounded-md  hover:bg-gray-600"
                           >
                             Aktiválás
                           </button>
                           <button
-                            onClick={() => openConfirmDeleteDialog(r.id)}
+                            onClick={(e) => openConfirmDeleteDialog(r.id, e)}
                             className="px-3 py-2 bg-red-500 text-white rounded-md  hover:bg-red-600"
                           >
                             Törlés
@@ -646,7 +713,14 @@ export function DashBoard() {
 
           {/* Rents */}
           <div className="bg-white rounded-2xl shadow p-4 flex flex-col h-screen">
-            <h3 className="font-semibold mb-3">Aktív bérlések</h3>
+            <div className="flex justify-between mb-3">
+              <h3 className="font-semibold mb-3">Aktív bérlések</h3>
+              <Download
+                data={rents}
+                sheetName={"Ajánlatkérés lista"}
+                fileName={"aktiv_berlesek"}
+              />
+            </div>
             {loadingRequests ? (
               <Loader />
             ) : (
@@ -657,7 +731,8 @@ export function DashBoard() {
                       key={r.id}
                       initial={{ opacity: 0, y: 6 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="border rounded-lg p-3 flex items-center justify-between"
+                      className="border rounded-lg p-3 flex items-center justify-between cursor-pointer hover:bg-gray-100"
+                      onClick={() => openRequestDialog(r)}
                     >
                       <div>
                         <div className="font-semibold">
@@ -678,13 +753,13 @@ export function DashBoard() {
                       </div>
                       <div className="flex flex-col gap-2">
                         <button
-                          onClick={() => setRentNotActivity(r.id)}
+                          onClick={(e) => setRentNotActive(r.id, e)}
                           className="px-3 py-2 bg-gray-500 text-white rounded-md  hover:bg-gray-600"
                         >
                           Leállítás
                         </button>
                         <button
-                          onClick={() => openConfirmDeleteDialog(r.id)}
+                          onClick={(e) => openConfirmDeleteDialog(r.id, e)}
                           className="px-3 py-2 bg-red-500 text-white rounded-md  hover:bg-red-600"
                         >
                           Törlés
@@ -765,6 +840,11 @@ export function DashBoard() {
           id={idToActivate}
           callback={setRequestActive}
           dropDownElements={machines}
+        />
+        <RequestDialog
+          isOpen={isRequestDialogOpen}
+          setIsOpen={setRequestDialogOpen}
+          requestData={requestDialogData}
         />
       </div>
     </div>

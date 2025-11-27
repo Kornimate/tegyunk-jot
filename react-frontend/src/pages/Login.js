@@ -26,7 +26,6 @@ export function Login() {
     async function apiCall() {
       setLoading(true);
       const resp = await checkIfTokenIsValid();
-      console.log(resp);
       if (resp) {
         setIsAuthenticated(true);
         setFastAuth(true);
