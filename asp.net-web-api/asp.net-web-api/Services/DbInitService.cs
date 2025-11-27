@@ -38,20 +38,35 @@ namespace asp.net_web_api.Services
                         Name = "TestName 1",
                         Email = "TestMail 1",
                         PhoneNumber = "1234567890",
-                        Message = "TestMessage 1"
+                        Message = "TestMessage 1",
+                        CreatedTime = DateTime.UtcNow,
                     },
                     new Request{
                         Name = "TestName 2",
                         Email = "TestMail 2",
                         PhoneNumber = "1234567890",
-                        Message = "TestMessage 2"
+                        Message = "TestMessage 2",
+                        CreatedTime = DateTime.UtcNow,
                     },
                     new Request{
                         Name = "TestName 3",
                         Email = "TestMail 3",
                         PhoneNumber = "1234567890",
                         Message = "TestMessage 3",
-                        IsActiveRequest = true
+                        IsActiveRequest = true,
+                        Machine = MachineTypes.HOSSPITAL_BED,
+                        CreatedTime = DateTime.UtcNow.AddDays(-5),
+                        ActivatedDate = DateTime.UtcNow.AddDays(-5),
+                    },
+                    new Request{
+                        Name = "TestName 4",
+                        Email = "TestMail 4",
+                        PhoneNumber = "1234567890",
+                        Message = "TestMessage 4",
+                        IsActiveRequest = true,
+                        Machine = MachineTypes.CPM,
+                        CreatedTime = DateTime.UtcNow.AddDays(-5),
+                        ActivatedDate = DateTime.UtcNow.AddDays(-5),
                     }
                     ]);
             }

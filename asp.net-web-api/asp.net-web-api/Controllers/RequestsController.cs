@@ -37,6 +37,7 @@ namespace asp.net_web_api.Controllers
                 return BadRequest();
 
             request.IsActiveRequest = dto.IsActive;
+            request.ActivatedDate = DateTime.UtcNow;
             request.Machine = (MachineTypes)dto.Machine;
 
             await _context.Logs.AddAsync(new LogEntry
