@@ -2,12 +2,10 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { Announcement } from "./Announcement";
-import { useAuth } from "../hooks/AuthProvider";
 import axios from "axios";
 
 export function ContactForm() {
   const { t, i18n } = useTranslation();
-  const { token } = useAuth();
 
   useEffect(() => {
     function handleLanguageChange() {
@@ -76,15 +74,16 @@ export function ContactForm() {
         name: formData.name,
         email: formData.email,
         phoneNumber: formData.phone,
-        possibleStartDate: formData.startDate,
+        possibleStartDate: formData.possibleStartDate === "" ? null : formData.possibleStartDate,
         message: formData.message,
       },
       {
         headers: {
-          Authorization: `Bearer ${token()}`,
+          "Content-Type": "application/json",
         },
       }
     );
+    
 
     setStateToNormal();
   }

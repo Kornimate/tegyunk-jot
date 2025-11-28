@@ -1,4 +1,5 @@
 ﻿using asp.net_web_api.DTOs;
+using asp.net_web_api.Interfaces;
 using asp.net_web_api.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,10 +14,12 @@ namespace asp.net_web_api.Controllers
     public class RequestsController : ControllerBase
     {
         private AppDbContext _context;
+        private IEmailService _emailService;
 
-        public RequestsController(AppDbContext context)
+        public RequestsController(AppDbContext context, IEmailService emailService)
         {
             _context = context;
+            _emailService = emailService;
         }
 
         [HttpGet]
@@ -74,7 +77,8 @@ namespace asp.net_web_api.Controllers
 
             await _context.SaveChangesAsync();
 
-            //email service to notify 
+            await _emailService.SendResponseToRequest(dto.Email);
+            await _emailService.SendNotificationToInbox(dto);
 
             return Created();
         }

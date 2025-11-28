@@ -10,6 +10,7 @@ namespace asp.net_web_api.Extensions
         public static IServiceCollection AddTransients(this IServiceCollection serviceProvider)
         {
             serviceProvider.AddTransient<IDbInitService, DbInitService>();
+            serviceProvider.AddTransient<IEmailService, EmailService>();
             serviceProvider.AddTransient<IEmailSender, EmailSender>();
             serviceProvider.AddTransient<IJwtService, JwtService>();
 
