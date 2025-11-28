@@ -56,11 +56,15 @@ namespace asp.net_web_api
                 };
             });
 
+            // Extension methods in Extensions/ServiceCollectionExtensions
             builder.Services.AddTransients();
+            builder.Services.AddSingletons();
+            builder.Services.AddHostedServices();
 
             builder.Services.AddControllers();
 
             builder.Services.AddEndpointsApiExplorer();
+
             builder.Services.AddSwaggerGen();
 
             var app = builder.Build();

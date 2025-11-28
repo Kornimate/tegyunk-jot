@@ -1,4 +1,5 @@
-﻿using asp.net_web_api.Users;
+﻿using asp.net_web_api.Interfaces;
+using asp.net_web_api.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -7,7 +8,7 @@ using System.Text;
 
 namespace ASP_Server.Services
 {
-    public class JwtService
+    public class JwtService : IJwtService
     {
         private readonly IConfiguration _configuration;
         public JwtService(IConfiguration configuration)
