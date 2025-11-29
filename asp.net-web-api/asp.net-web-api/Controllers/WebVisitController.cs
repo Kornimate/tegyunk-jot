@@ -59,25 +59,27 @@ namespace asp.net_web_api.Controllers
         public async Task<IActionResult> GetVisitCoordinates()
         {
             return Ok(await _context.WebVisits
-                                .Where(x => x.RecordedTime >= DateTime.UtcNow.Date.AddDays(-9))
+                                .Where(x => x.RecordedTime >= DateTime.UtcNow.Date.AddDays(-9) && x.LatitudeCoord != null && x.LatitudeCoord != null)
                                 .Select(x => new WebVisitDto
                                 {
                                     Id = x.Id.ToString(),
                                     Name = $"Hely",
-                                    Coords = new[] { x.LatitudeCoord, x.LongitudeCoord }
+                                    Coords = new[] { x.LatitudeCoord!.Value, x.LongitudeCoord!.Value }
                                 })
                                 .ToListAsync());
         }
 
         [AllowAnonymous]
         [HttpPost("new")]
-        public async Task<IActionResult> PostNewVisit([FromBody] WebVisitDto dto)
+        public async Task<IActionResult> PostNewVisit([FromBody] VisitorDto dto)
         {
             await _context.AddAsync(new WebVisit
             {
-                LatitudeCoord = dto.Coords[0],
-                LongitudeCoord = dto.Coords[1],
+                LatitudeCoord = dto.Latitude,
+                LongitudeCoord = dto.Longitude,
             });
+
+            await _context.SaveChangesAsync();
 
             return Ok();
         }

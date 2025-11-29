@@ -1,4 +1,5 @@
 ﻿using asp.net_web_api.DTOs;
+using asp.net_web_api.Interfaces;
 using asp.net_web_api.Models;
 using asp.net_web_api.Users;
 using ASP_Server.Services;
@@ -16,9 +17,9 @@ namespace asp.net_web_api.Controllers
     public class AuthController : ControllerBase
     {
         private readonly UserManager<AppUser> _userManager;
-        private readonly JwtService _jwtService;
+        private readonly IJwtService _jwtService;
         private readonly AppDbContext _context;
-        public AuthController(UserManager<AppUser> userManager, JwtService jwtService, AppDbContext context)
+        public AuthController(UserManager<AppUser> userManager, IJwtService jwtService, AppDbContext context)
         {
             _userManager = userManager;
             _jwtService = jwtService;

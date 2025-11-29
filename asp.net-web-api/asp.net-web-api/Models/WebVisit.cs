@@ -8,11 +8,9 @@ namespace asp.net_web_api.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
 
-        [NotNull]
-        public double LongitudeCoord { get; set; } = 0;
+        public double? LongitudeCoord { get; set; }
 
-        [NotNull]
-        public double LatitudeCoord { get; set; } = 0;
+        public double? LatitudeCoord { get; set; }
 
         [NotNull]
         public DateTime RecordedTime { get; set; } = DateTime.UtcNow.Date;

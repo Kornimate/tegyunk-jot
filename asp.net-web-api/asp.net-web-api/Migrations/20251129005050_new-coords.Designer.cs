@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using asp.net_web_api.Models;
 
@@ -10,9 +11,11 @@ using asp.net_web_api.Models;
 namespace asp.net_web_api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251129005050_new-coords")]
+    partial class newcoords
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -167,7 +170,7 @@ namespace asp.net_web_api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Logs", (string)null);
+                    b.ToTable("Logs");
                 });
 
             modelBuilder.Entity("asp.net_web_api.Models.Request", b =>
@@ -215,7 +218,7 @@ namespace asp.net_web_api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Requests", (string)null);
+                    b.ToTable("Requests");
                 });
 
             modelBuilder.Entity("asp.net_web_api.Models.Resource", b =>
@@ -233,7 +236,7 @@ namespace asp.net_web_api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Resources", (string)null);
+                    b.ToTable("Resources");
                 });
 
             modelBuilder.Entity("asp.net_web_api.Models.WebVisit", b =>
@@ -253,7 +256,7 @@ namespace asp.net_web_api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("WebVisits", (string)null);
+                    b.ToTable("WebVisits");
                 });
 
             modelBuilder.Entity("asp.net_web_api.Users.AppUser", b =>
