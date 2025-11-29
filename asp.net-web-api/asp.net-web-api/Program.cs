@@ -16,14 +16,24 @@ namespace asp.net_web_api
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddDbContext<AppDbContext>(options =>
+            builder.Services.AddDbContext<PersistentDbContext>(options =>
             {
-                options.UseSqlite(builder.Configuration.GetConnectionString("SQLiteDB"));
+                options.UseSqlite(builder.Configuration.GetConnectionString("SQLiteDB"),
+                                  options => options.MigrationsHistoryTable("__EFMigrationsHistory_PersContext")
+                                                    .MigrationsAssembly(typeof(PersistentDbContext).Assembly.FullName));
+                options.UseLazyLoadingProxies();
+            });
+            
+            builder.Services.AddDbContext<TemporaryDbContext>(options =>
+            {
+                options.UseSqlite(builder.Configuration.GetConnectionString("TempSQLiteDB"),
+                                  options => options.MigrationsHistoryTable("__EFMigrationsHistory_TempContext")
+                                                    .MigrationsAssembly(typeof(TemporaryDbContext).Assembly.FullName));
                 options.UseLazyLoadingProxies();
             });
 
-            builder.Services.AddIdentity<AppUser, IdentityRole>() //may need to expand with restrictions about user password and email
-                .AddEntityFrameworkStores<AppDbContext>()
+            builder.Services.AddIdentity<AppUser, IdentityRole>()
+                .AddEntityFrameworkStores<PersistentDbContext>()
                 .AddDefaultTokenProviders();
 
             builder.Services.AddAuthentication(options =>

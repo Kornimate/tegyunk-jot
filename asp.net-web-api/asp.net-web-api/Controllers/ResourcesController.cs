@@ -12,8 +12,8 @@ namespace asp.net_web_api.Controllers
     [Route("api/resources")]
     public class ResourcesController : ControllerBase
     {
-        private readonly AppDbContext _context;
-        public ResourcesController(AppDbContext context)
+        private readonly PersistentDbContext _context;
+        public ResourcesController(PersistentDbContext context)
         {
             _context = context;
         }

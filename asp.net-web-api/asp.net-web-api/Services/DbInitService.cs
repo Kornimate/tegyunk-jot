@@ -6,14 +6,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace asp.net_web_api.Services
 {
-    public class DbInitService : IDbInitService
+    public sealed class DbInitService : IDbInitService
     {
-        private readonly AppDbContext _context;
+        private readonly PersistentDbContext _context;
+        private readonly TemporaryDbContext _tempContext;
         private readonly UserManager<AppUser> _userManager;
 
-        public DbInitService(AppDbContext context, UserManager<AppUser> userManager)
+        public DbInitService(PersistentDbContext context, TemporaryDbContext tempContext, UserManager<AppUser> userManager)
         {
             _context = context;
+            _tempContext = tempContext;
             _userManager = userManager;
         }
 
@@ -25,10 +27,11 @@ namespace asp.net_web_api.Services
         public bool Initialize()
         {
             _context.Database.Migrate();
+            _tempContext.Database.Migrate();
 
             if (!_context.Users.Any())
             {
-                var res = _userManager.CreateAsync(new AppUser { Email = "test@tj.com", UserName = "test" }, "Password.1234").GetAwaiter().GetResult();
+                _userManager.CreateAsync(new AppUser { Email = "test@tj.com", UserName = "test" }, "Password.1234").GetAwaiter().GetResult();
             }
 
             if (!_context.Requests.Any())
@@ -71,9 +74,9 @@ namespace asp.net_web_api.Services
                     ]);
             }
 
-            if (!_context.Logs.Any())
+            if (!_tempContext.Logs.Any())
             {
-                _context.AddRange([
+                _tempContext.AddRange([
                     new LogEntry{
                         Text = "Test Log 1",
                         RecordedTime = DateTime.UtcNow.Date,
@@ -89,9 +92,9 @@ namespace asp.net_web_api.Services
                     ]);
             }
 
-            if (!_context.WebVisits.Any())
+            if (!_tempContext.WebVisits.Any())
             {
-                _context.AddRange([
+                _tempContext.AddRange([
                     new WebVisit {
                         LatitudeCoord = 48.1118,
                         LongitudeCoord = 20.80101

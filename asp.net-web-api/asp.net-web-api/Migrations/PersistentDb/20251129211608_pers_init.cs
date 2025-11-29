@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace asp.net_web_api.Migrations
+namespace asp.net_web_api.Migrations.PersistentDb
 {
     /// <inheritdoc />
-    public partial class dbschema : Migration
+    public partial class pers_init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -99,20 +99,6 @@ namespace asp.net_web_api.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Resources", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "WebVisits",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    LongitudeCoord = table.Column<double>(type: "REAL", nullable: false),
-                    LatitudeCoord = table.Column<double>(type: "REAL", nullable: false),
-                    RecordedTime = table.Column<DateTime>(type: "TEXT", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_WebVisits", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -285,9 +271,6 @@ namespace asp.net_web_api.Migrations
 
             migrationBuilder.DropTable(
                 name: "Resources");
-
-            migrationBuilder.DropTable(
-                name: "WebVisits");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

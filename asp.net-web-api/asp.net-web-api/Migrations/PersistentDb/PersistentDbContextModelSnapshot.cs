@@ -2,20 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using asp.net_web_api.Models;
 
 #nullable disable
 
-namespace asp.net_web_api.Migrations
+namespace asp.net_web_api.Migrations.PersistentDb
 {
-    [DbContext(typeof(AppDbContext))]
-    [Migration("20251129005050_new-coords")]
-    partial class newcoords
+    [DbContext(typeof(PersistentDbContext))]
+    partial class PersistentDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -237,26 +234,6 @@ namespace asp.net_web_api.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Resources");
-                });
-
-            modelBuilder.Entity("asp.net_web_api.Models.WebVisit", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<double?>("LatitudeCoord")
-                        .HasColumnType("REAL");
-
-                    b.Property<double?>("LongitudeCoord")
-                        .HasColumnType("REAL");
-
-                    b.Property<DateTime>("RecordedTime")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("WebVisits");
                 });
 
             modelBuilder.Entity("asp.net_web_api.Users.AppUser", b =>

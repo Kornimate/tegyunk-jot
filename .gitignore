@@ -1,0 +1,8 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/asp.net-web-api/asp.net-web-api/database.db
+/asp.net-web-api/asp.net-web-api/database_temp.db
+/asp.net-web-api/asp.net-web-api/database.db-shm
+/asp.net-web-api/asp.net-web-api/database.db-wal

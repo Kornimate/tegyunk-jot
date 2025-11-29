@@ -10,9 +10,9 @@ namespace asp.net_web_api.Controllers
     [Route("api/webvisit")]
     public class WebVisitController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly TemporaryDbContext _context;
 
-        public WebVisitController(AppDbContext context)
+        public WebVisitController(TemporaryDbContext context)
         {
             _context = context;
         }

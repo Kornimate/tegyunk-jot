@@ -20,13 +20,14 @@ namespace asp.net_web_api.Extensions
         public static IServiceCollection AddSingletons(this IServiceCollection serviceProvider)
         {
             serviceProvider.AddSingleton<IDbBackupService, DbBackupService>();
+            serviceProvider.AddSingleton<ITemporaryDbCleaningService, TemporaryDbCleaningService>();
 
             return serviceProvider;
         }
 
         public static IServiceCollection AddHostedServices(this IServiceCollection serviceProvider)
         {
-            serviceProvider.AddHostedService<DbRedundancyService>();
+            serviceProvider.AddHostedService<DbRedundancyBackgroundService>();
 
             return serviceProvider;
         }

@@ -18,8 +18,8 @@ namespace asp.net_web_api.Controllers
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly IJwtService _jwtService;
-        private readonly AppDbContext _context;
-        public AuthController(UserManager<AppUser> userManager, IJwtService jwtService, AppDbContext context)
+        private readonly PersistentDbContext _context;
+        public AuthController(UserManager<AppUser> userManager, IJwtService jwtService, PersistentDbContext context)
         {
             _userManager = userManager;
             _jwtService = jwtService;

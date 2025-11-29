@@ -4,14 +4,16 @@ using asp.net_web_api.Interfaces;
 
 namespace asp.net_web_api.Services
 {
-    public class DbRedundancyService : BackgroundService
+    public class DbRedundancyBackgroundService : BackgroundService
     {
         private IDbBackupService _backupService;
+        private ITemporaryDbCleaningService _dbCleaningService;
         private DateTime _lastBackup = DateTime.MinValue;
 
-        public DbRedundancyService(IDbBackupService backupService)
+        public DbRedundancyBackgroundService(IDbBackupService backupService, ITemporaryDbCleaningService dbCleaningService)
         {
             _backupService = backupService;
+            _dbCleaningService = dbCleaningService;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -26,6 +28,8 @@ namespace asp.net_web_api.Services
                     {
                         await _backupService.SaveToDisk();
                         await _backupService.RemoveOldBackups();
+
+                        await _dbCleaningService.RemoveOlderThan12DaysElements();
 
                         _lastBackup = today;
                     }

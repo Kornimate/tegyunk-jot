@@ -11,9 +11,9 @@ namespace asp.net_web_api.Controllers
     [Route("api/logs")]
     public class LogsController : ControllerBase
     {
-        private AppDbContext _context;
+        private PersistentDbContext _context;
 
-        public LogsController(AppDbContext context)
+        public LogsController(PersistentDbContext context)
         {
             _context = context;
         }

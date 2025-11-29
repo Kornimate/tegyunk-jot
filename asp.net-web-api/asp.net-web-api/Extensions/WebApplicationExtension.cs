@@ -8,12 +8,10 @@ namespace asp.net_web_api.Extensions
         {
             using (var serviceScope = webApplication.Services.CreateScope())
             {
-                using(var dbInitService = serviceScope.ServiceProvider.GetRequiredService<IDbInitService>())
-                {
-                    dbInitService.Initialize();
-                }
+                using var dbInitService = serviceScope.ServiceProvider.GetRequiredService<IDbInitService>();
+                dbInitService.Initialize();
             }
-                return webApplication;
+            return webApplication;
         }
     }
 }

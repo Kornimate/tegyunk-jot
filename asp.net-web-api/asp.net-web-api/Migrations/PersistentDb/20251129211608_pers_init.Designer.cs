@@ -2,17 +2,20 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using asp.net_web_api.Models;
 
 #nullable disable
 
-namespace asp.net_web_api.Migrations
+namespace asp.net_web_api.Migrations.PersistentDb
 {
-    [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(PersistentDbContext))]
+    [Migration("20251129211608_pers_init")]
+    partial class pers_init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -167,7 +170,7 @@ namespace asp.net_web_api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Logs", (string)null);
+                    b.ToTable("Logs");
                 });
 
             modelBuilder.Entity("asp.net_web_api.Models.Request", b =>
@@ -215,7 +218,7 @@ namespace asp.net_web_api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Requests", (string)null);
+                    b.ToTable("Requests");
                 });
 
             modelBuilder.Entity("asp.net_web_api.Models.Resource", b =>
@@ -233,27 +236,7 @@ namespace asp.net_web_api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Resources", (string)null);
-                });
-
-            modelBuilder.Entity("asp.net_web_api.Models.WebVisit", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<double?>("LatitudeCoord")
-                        .HasColumnType("REAL");
-
-                    b.Property<double?>("LongitudeCoord")
-                        .HasColumnType("REAL");
-
-                    b.Property<DateTime>("RecordedTime")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("WebVisits", (string)null);
+                    b.ToTable("Resources");
                 });
 
             modelBuilder.Entity("asp.net_web_api.Users.AppUser", b =>

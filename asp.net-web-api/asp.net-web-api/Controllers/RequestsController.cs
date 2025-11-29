@@ -13,10 +13,10 @@ namespace asp.net_web_api.Controllers
     [Route("api/requests")]
     public class RequestsController : ControllerBase
     {
-        private AppDbContext _context;
+        private PersistentDbContext _context;
         private IEmailService _emailService;
 
-        public RequestsController(AppDbContext context, IEmailService emailService)
+        public RequestsController(PersistentDbContext context, IEmailService emailService)
         {
             _context = context;
             _emailService = emailService;
