@@ -1,23 +1,41 @@
+import axios from "axios";
+import { hasVisitedToday, SetVisitForToday } from "../services/webVisitService";
+
 export const GeoLocationCounter = () => {
-  function getGeolocation() {
+  async function getGeolocation() {
+    if (hasVisitedToday()) return;
+
+    let latitude = null;
+    let longitude = null;
+
+    function showPosition(position) {
+      latitude = position.coords.latitude;
+      longitude = position.coords.longitude;
+
+      callApiWithData(latitude, longitude);
+    }
+
+    function showError(_) {
+      callApiWithData(latitude, longitude);
+    }
+
+    async function callApiWithData(latitude, longitude) {
+      try {
+        await axios.post(`${process.env.REACT_APP_BASE_URL}/api/webvisit/new`, {
+          latitude: latitude,
+          longitude: longitude,
+        });
+
+        SetVisitForToday();
+      } catch {}
+    }
+
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(showPosition, showError);
     } else {
-      alert("Geolocation is not supported by this browser.");
+      callApiWithData(latitude, longitude)
     }
   }
-
-  function showPosition(position) {
-    const latitude = position.coords.latitude;
-    const longitude = position.coords.longitude;
-    const accuracy = position.coords.accuracy;
-
-    console.log(`Latitude: ${latitude}`);
-    console.log(`Longitude: ${longitude}`);
-    console.log(`Accuracy: ${accuracy} meters`);
-  }
-
-  function showError(error) {}
 
   getGeolocation();
 };

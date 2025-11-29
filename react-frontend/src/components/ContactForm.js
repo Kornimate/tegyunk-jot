@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
-import { Announcement } from "./Announcement";
+import { Spinner } from "./Spinner";
 import axios from "axios";
+import { ReusableAnnouncement } from "./ReusableAnnouncement";
 
 export function ContactForm() {
   const { t, i18n } = useTranslation();
+
+  const [successMsgOpen, setSuccessMsgOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     function handleLanguageChange() {
@@ -63,6 +67,7 @@ export function ContactForm() {
       setErrors(validationErrors);
       setSuccess(false);
     } else {
+      setIsLoading(true);
       sendRequest();
     }
   };
@@ -74,7 +79,8 @@ export function ContactForm() {
         name: formData.name,
         email: formData.email,
         phoneNumber: formData.phone,
-        possibleStartDate: formData.possibleStartDate === "" ? null : formData.possibleStartDate,
+        possibleStartDate:
+          formData.possibleStartDate === "" ? null : formData.possibleStartDate,
         message: formData.message,
       },
       {
@@ -83,9 +89,10 @@ export function ContactForm() {
         },
       }
     );
-    
 
+    setSuccessMsgOpen(true);
     setStateToNormal();
+    setIsLoading(false);
   }
 
   function setStateToNormal() {
@@ -197,20 +204,22 @@ export function ContactForm() {
       <div className="col-span-2 md:col-span-2 flex justify-center">
         <button
           type="submit"
+          disabled={isLoading}
           className="rounded-lg px-5 py-2 bg-gradient-to-r from-red-500 to-black text-white font-semibold shadow-md hover:scale-105 transition-transform"
         >
-          {t("btnSendMessage")}
+          {isLoading ? <Spinner /> : t("btnSendMessage")}
         </button>
       </div>
 
       {/* Success Message */}
       {success && (
         <div className="col-span-2">
-          <Announcement
+          <ReusableAnnouncement
             type="info"
             message={`✅ ${t("formSuccess")}`}
             extraStyle="my-2"
-            closable={true}
+            open={successMsgOpen}
+            setOpen={setSuccessMsgOpen}
           />
         </div>
       )}

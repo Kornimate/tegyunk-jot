@@ -25,7 +25,7 @@ import { ConfirmRequestStartDialog } from "../components/ConfirmRequestStartDial
 import "../styles/leaflet-overrides.css";
 import { SettingsHandler } from "../components/SettingsHandler";
 import { RequestDialog } from "../components/RequestDialog";
-import { compareDate1IsOlder } from "../services/dateService";
+import { compareDate1IsOlderOrSame } from "../services/dateService";
 import Download from "../components/Download";
 
 const DONUT_COLORS = ["#EF4444", "#000"];
@@ -201,7 +201,7 @@ export function DashBoard() {
       let counter = 0;
 
       for (let j = 0; j < cpmRents.length; j++) {
-        if (compareDate1IsOlder(cpmRents[j].activatedDate, day)) {
+        if (compareDate1IsOlderOrSame(cpmRents[j].activatedDate, day)) {
           counter++;
         }
       }
@@ -214,11 +214,11 @@ export function DashBoard() {
 
       for (let j = 0; j < bedRents.length; j++) {
         console.log(
-          compareDate1IsOlder(bedRents[j].activatedDate, day),
+          compareDate1IsOlderOrSame(bedRents[j].activatedDate, day),
           bedRents[j].activatedDate,
           day
         );
-        if (compareDate1IsOlder(bedRents[j].activatedDate, day)) {
+        if (compareDate1IsOlderOrSame(bedRents[j].activatedDate, day)) {
           counter++;
         }
       }
@@ -570,17 +570,22 @@ export function DashBoard() {
             {loadingVisits ? (
               <Loader />
             ) : (
-              <div className="h-64 items-center">
-                <ResponsiveContainer>
-                  <BarChart data={visits}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="date" />
-                    <YAxis />
-                    <Tooltip />
-                    <Bar dataKey="visits" fill="#9CA3AF" />
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
+              <>
+                <div className="h-60 items-center">
+                  <ResponsiveContainer>
+                    <BarChart data={visits}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="date" />
+                      <YAxis />
+                      <Tooltip />
+                      <Bar dataKey="visits" fill="#9CA3AF" />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+                <div className="mt-1 text-sm text-gray-500">
+                  Összes látogatás (utolsó 10 nap): {visits.length}
+                </div>
+              </>
             )}
           </div>
 

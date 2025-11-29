@@ -1,5 +1,5 @@
-export function compareDate1IsOlder(date1, date2){
-    if(date1 === null || date2 === null)
+export function compareDate1IsOlderOrSame(date1, date2){
+    if(!date1 || !date2)
         return false;
 
     return date1.getFullYear() <= date2.getFullYear()
